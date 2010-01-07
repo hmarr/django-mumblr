@@ -1,0 +1,34 @@
+{% extends "mumblr/base.html" %}
+
+{% load mumblr_csrf %}
+
+{% block content %}
+{% for entry in entries %}
+    <div class="entry">
+        {% if user %}
+            <div style="float: right">
+                <a href="{% url edit-entry entry.id %}">Edit</a> |
+                <a href="{% url delete-entry entry.id %}?{% csrf_url_token %}">Delete</a>
+            </div>
+        {% endif %}
+        <h3>
+            {% if entry.link_url %}
+                <a href="{{ entry.link_url }}">
+            {% else %}
+                <a href="{{ entry.get_absolute_url }}">
+            {% endif %}
+            {{ entry.title|safe }}</a></h3>
+        {{ entry.rendered_content|safe }}
+        {% if entry.tags %}
+            <p style="color: #555;">
+            {% for tag in entry.tags %}
+                <a href="{% url tagged-entries tag %}">{{ tag }}</a>{% if not forloop.last %}, {% endif %}
+            {% endfor %}
+            </p>
+        {% endif %}
+        {% if not forloop.last %}
+            <hr />
+        {% endif %}
+    </div>
+{% endfor %}
+{% endblock %}

@@ -1,0 +1,9 @@
+{% extends "mumblr/base.html" %}
+
+{% block content %}
+<ul>
+{% for type in entry_types %}
+    <li><a href="{% url add-entry type %}">Add {{ type }} entry</a></li>
+{% endfor %}
+</ul>
+{% endblock %}

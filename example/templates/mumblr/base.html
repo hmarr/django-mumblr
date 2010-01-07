@@ -1,0 +1,32 @@
+{% load mumblr_csrf %}
+
+<html>
+    <head>
+        <title>{{ title }} | Mumblr</title>
+        <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/reset.css" />
+        <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/layout.css" />
+        <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/typography.css" />
+    </head>
+    <body>
+        <div id="content">
+        {% if user.is_authenticated %}
+            <p>
+            {% if user.first_name %}
+                {{ user.first_name }} 
+                {% if user.last_name %}
+                    {{ user.last_name }} 
+                {% endif %}
+            {% else %}
+                {{ user.email }}
+            {% endif %}
+            | <a href="{% url admin %}">Admin</a>
+            | <a href="{% url log-out %}?{% csrf_url_token %}">Log out</a></p>
+        {% else %}
+            <p><a href="{% url log-in %}">Log in</a></p>
+        {% endif %}
+        <h1><a href="{% url recent-entries %}">Mumblr</a></h1>
+        <h2>{{ title|safe }}</h2>
+        {% block content %}{% endblock %}
+        </div>
+    </body>
+</html>

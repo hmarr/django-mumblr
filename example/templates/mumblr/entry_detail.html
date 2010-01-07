@@ -1,0 +1,13 @@
+{% extends "mumblr/base.html" %}
+
+{% block content %}
+<p>{{ entry.date|date:"F j, Y" }}</p>
+{{ entry.rendered_content|safe }}
+{% if entry.tags %}
+    <p style="color: #555;">
+    {% for tag in entry.tags %}
+        <a href="{% url tagged-entries tag %}">{{ tag }}</a>{% if not forloop.last %}, {% endif %}
+    {% endfor %}
+    </p>
+{% endif %}
+{% endblock %}

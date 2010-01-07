@@ -1,0 +1,9 @@
+{% extends "mumblr/base.html" %}
+
+{% block content %}
+{% for tag, freq in tag_cloud.items %}
+<a href="{% url tagged-entries tag %}">
+    <span style="font-size: {% widthratio freq 1.0 120 %}px">{{ tag }}</span>
+</a>
+{% endfor %}
+{% endblock %}
