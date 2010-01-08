@@ -105,12 +105,6 @@ blockquote {
 }
 
 code {
-    background: #fff;
-    border: 10px solid #eee;
-    padding: 15px 10px 15px 30px;
-    display: block;
-    margin: 20px 0 20px -40px;
-    width: 580px;
     font-family: Monaco, "Courier New", "Courier", monospace;
     white-space: nowrap;
     font-size: 11px;
@@ -118,6 +112,12 @@ code {
 
 pre code {
     white-space: pre-wrap;
+    background: #fff;
+    border: 10px solid #eee;
+    padding: 15px 10px 15px 30px;
+    display: block;
+    margin: 20px 0 20px -40px;
+    width: 580px;
 }
 
 /*
