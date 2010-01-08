@@ -4,8 +4,7 @@ from django.db.models import permalink
 from datetime import datetime
 import re
 from mongoengine import *
-
-from mumblr.models import User
+from mongoengine.django.auth import User
 
 
 class Comment(EmbeddedDocument):

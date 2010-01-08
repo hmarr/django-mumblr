@@ -71,8 +71,6 @@ class ImageEntry(EntryType):
 
     def rendered_content(self):
         url = self.image_url
-        if self.local:
-            url = settings.MEDIA_URL + self.image_url
         html = '<img src="%s" />' % url
         if self.description:
             html += markup(self.description)
