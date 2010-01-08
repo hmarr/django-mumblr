@@ -4,29 +4,48 @@
     <head>
         <title>{{ title }} | Mumblr</title>
         <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/reset.css" />
-        <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/layout.css" />
-        <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/typography.css" />
+        <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/grey-theme.css" />
     </head>
     <body>
-        <div id="content">
-        {% if user.is_authenticated %}
-            <p>
-            {% if user.first_name %}
-                {{ user.first_name }} 
-                {% if user.last_name %}
-                    {{ user.last_name }} 
+        <div class="container">
+        <div class="pagehead">
+            <div class="content">
+
+            <h1><a href="{% url recent-entries %}">Mumblr</a><span></span></h1>
+
+            {% if user.is_authenticated %}
+            <div class="admin-box">
+                <span class="tab"></span>
+                <p>
+                {% if user.first_name %}
+                    {{ user.first_name }} 
+                    {% if user.last_name %}
+                        {{ user.last_name }} 
+                    {% endif %}
+                {% else %}
+                    {{ user.email }}
                 {% endif %}
-            {% else %}
-                {{ user.email }}
+                <br/>
+                <a class="mbl-button" href="{% url admin %}">Admin</a>&nbsp;<a class="mbl-button mbl-button-primary" href="{% url log-out %}?{% csrf_url_token %}">Log out</a>
+                </p>
+            </div>
             {% endif %}
-            | <a href="{% url admin %}">Admin</a>
-            | <a href="{% url log-out %}?{% csrf_url_token %}">Log out</a></p>
-        {% else %}
-            <p><a href="{% url log-in %}">Log in</a></p>
-        {% endif %}
-        <h1><a href="{% url recent-entries %}">Mumblr</a></h1>
-        <h2>{{ title|safe }}</h2>
-        {% block content %}{% endblock %}
+
+            <h2>{{ title|safe }}</h2>
+
+
+            {% block content %}{% endblock %}
+            </div> <!-- /content-->
+        </div> <!-- /pagehead -->
+        </div> <!-- /container -->
+        <div class="footer">
+            <div class="container">
+            {% if user.is_authenticated %}
+                <a class="mbl-button mbl-button-primary" href="{% url log-out %}?{% csrf_url_token %}">Log out</a>
+            {% else %}
+                <p><a class="mbl-button mbl-button-primary" href="{% url log-in %}">Log in</a></p>
+            {% endif %}
+            </div>
         </div>
     </body>
 </html>

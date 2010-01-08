@@ -5,10 +5,9 @@
 {% block content %}
 {% for entry in entries %}
     <div class="entry">
-        {% if user %}
-            <div style="float: right">
-                <a href="{% url edit-entry entry.id %}">Edit</a> |
-                <a href="{% url delete-entry entry.id %}?{% csrf_url_token %}">Delete</a>
+        {% if user.is_authenticated %}
+            <div class="edit-box">
+                <a class="mbl-button" href="{% url edit-entry entry.id %}">Edit</a>&nbsp;<a class="mbl-button mbl-button-primary" href="{% url delete-entry entry.id %}?{% csrf_url_token %}">Delete</a>
             </div>
         {% endif %}
         <h3>
@@ -18,16 +17,20 @@
                 <a href="{{ entry.get_absolute_url }}">
             {% endif %}
             {{ entry.title|safe }}</a></h3>
+            <div class="post-info">
+            <p class="date">{{ entry.date|date:"F j, Y" }}</p>
+            {% if entry.tags %}
+                <ul class="inline-tag-list">
+                {% for tag in entry.tags %}
+                    <li><a class="tag" href="{% url tagged-entries tag %}"><span>{{ tag }}</span></a></li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+            <div class="clear"></div>
+            </div>
         {{ entry.rendered_content|safe }}
-        {% if entry.tags %}
-            <p style="color: #555;">
-            {% for tag in entry.tags %}
-                <a href="{% url tagged-entries tag %}">{{ tag }}</a>{% if not forloop.last %}, {% endif %}
-            {% endfor %}
-            </p>
-        {% endif %}
         {% if not forloop.last %}
-            <hr />
+            <div class="hr-styled"></div>
         {% endif %}
     </div>
 {% endfor %}
