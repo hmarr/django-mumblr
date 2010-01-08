@@ -35,7 +35,7 @@ def log_in(request):
     context = {
         'title': 'Log In',
         'form': form,
-        redirect_field_name: redirect_to,
+        REDIRECT_FIELD_NAME: redirect_to,
     }
     return render_to_response('mumblr/log_in.html', context, 
                               context_instance=RequestContext(request))
