@@ -17,9 +17,9 @@ class AuthMiddleware(object):
         userid = None
         try:
             userid = unsign(request.COOKIES['userid'])
+            request.user = get_user(userid)
         except:
             pass
-        request.user = get_user(userid)
 
 
 if not getattr(settings, 'CSRF_COOKIE_NAME', None):
