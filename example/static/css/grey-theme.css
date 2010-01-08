@@ -1,0 +1,390 @@
+/*
+ * Mumblr Grey Theme
+ * 8th Jan 2010
+ * Steve Challis
+ *
+ * Museo Slab, A font by Jos Buivenga (exljbris) -> http://www.exljbris.nl
+ * 
+ */
+
+
+/*
+ *
+ * Typography
+ *
+ */
+
+@font-face {
+    font-family: Museo Slab;
+    src: url('../other/Museo_Slab_500.otf') format("opentype");
+}
+
+em {
+    font-style: italic;
+}
+
+strong {
+    font-weight: bold;
+}
+
+pre {
+    white-space: pre-wrap; /* css-3 */
+    white-space: -moz-pre-wrap !important; /* Mozilla, since 1999 */
+    white-space: -pre-wrap; /* Opera 4-6 */
+    white-space: -o-pre-wrap; /* Opera 7 */
+    /* width: 99%; */
+    word-wrap: break-word; /* Internet Explorer 5.5+ */
+}
+
+a {
+    text-decoration: none;
+    color: #B6B7AB;
+}
+
+a:hover {
+    color: #CFD0C6;
+}
+
+h1, h2, h3, h4, h5, h6, .date, a.tag, blockquote, table tbody tr th {
+    font-family: 'Museo Slab', Georgia, Helvetica, Arial, Verdana, sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: normal;
+    margin: 10px 0;
+}
+
+h1 {
+    color: #fff;
+    font-size: 2.6em;
+    background: #333;
+    padding: 10px 20px 10px 40px;
+    position: absolute;
+    top: 40px;
+    left: 22px;
+    max-width: 170px;
+    line-height: 1em;
+}
+
+h1 a {
+    color: #fff;
+}
+
+h2 {
+    color: #333;
+    font-size: 2em;
+    padding: 10px 0;
+    margin-bottom: 5px;
+    line-height: 28px;
+    padding-right: 100px;
+}
+
+h2 a, h3 a, h4 a {
+    color: #000;
+}
+
+h3 {
+    font-size: 1.4em;
+}
+
+h4 {
+    font-size: 1.2em;
+}
+
+.date {
+    color: #ccc;
+}
+
+blockquote {
+    color: #aaa;
+    font-size: 1.28em; 
+    line-height: 24px;
+    margin: 1.5em 0 1.5em 40px !important;
+    width: 560px;
+    padding: 0;
+}
+
+code {
+    background: #fff;
+    border: 10px solid #eee;
+    padding: 15px 10px 15px 30px;
+    display: block;
+    margin: 20px 0 20px -40px;
+    width: 580px;
+    font-family: Monaco, "Courier New", "Courier", monospace;
+    white-space: nowrap;
+    font-size: 11px;
+}
+
+pre code {
+    white-space: pre-wrap;
+}
+
+/*
+ *
+ * Lists
+ *
+ */
+
+ol, ul {
+    list-style-image:none;
+    list-style-position:outside;
+    list-style-type:none;
+    padding: 0;
+    margin: 0;
+    vertical-align: top;
+    margin: 10px 0;
+}    
+
+ul li { list-style-type: square; }
+ol li { list-style-type: decimal; }
+
+body {
+    font-size: 100%;
+    font-size: 0.875em;
+    line-height: 21px;
+    font-family: Helvetica, Verdana;
+    background: url('../images/bg.png') 0 0 repeat-x #fff;
+}
+
+/*
+ *
+ * Forms & Tables
+ *
+ */
+
+form table {
+    margin-left: -120px;
+}
+
+input[type=text], input[type=password], textarea {
+    border: 2px solid #eee;
+    padding: 3px;
+    font-size: 14px;
+    width: 400px;
+}
+
+input[type=text]:focus, input[type=password]:focus, textarea:focus {
+    border: 2px solid #B6B7AB;
+}
+
+.errorlist li { list-style-type: none; }
+
+.errorlist {
+    color: #c00;
+    padding: 4px;
+    margin: 0;
+    margin-bottom: 0.3em;
+    border: 2px solid #c00;
+    font-size: 12px;
+    font-weight: bold;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+}
+
+a.mbl-button, input[type=submit], input[type=button] {
+    background: url('../images/white-grad.png') 0 0 repeat-x #9b9b9b;
+    border: 1px solid #858585;
+    border-bottom: 1px solid #666;
+    text-shadow: 0px 0px 2px #888;
+    color: #fff !important;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 12px;
+    padding: 3px 10px 3px 10px;
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    box-shadow: 0px 0px 4px #666;
+    -moz-box-shadow: 0px 0px 4px #666;
+    -webkit-box-shadow: 0px 0px 4px #666;
+    outline: none;
+    white-space: nowrap;
+    cursor: pointer;
+    line-height: 16px;
+}
+
+a.mbl-button:hover, input[type=button]:hover {
+    background: url('../images/white-grad-strong.png') 0 0 repeat-x #9b9b9b;
+}
+
+a.mbl-button-primary, input[type=submit] {
+    background-color: #545454;
+    border: 1px solid #404040;
+    border-bottom: 1px solid #333;
+    text-shadow: 0px 0px 2px #555;
+}
+
+a.mbl-button-primary:hover, input[type=submit]:hover {
+    background: url('../images/white-grad-strong.png') 0 0 repeat-x #545454;
+}
+
+/*
+ *
+ * Layout
+ *
+ */
+
+p, ul, ol, blockquote, table {
+    margin: 0.5em 0 ;
+}
+
+.admin-box {
+    background: #333;
+    padding: 10px 20px 10px 40px;
+    color: #fff;
+    display: block;
+    position: absolute;
+    clear: both;
+    top: 150px;
+    left: 22px;
+    line-height: 24px;
+    max-width: 170px;
+}
+
+h1 span, .admin-box span.fold {
+    background: url('../images/tab.png') 0 0 no-repeat;
+    width: 20px;
+    height: 8px;
+    position: absolute;
+    top: -8px;
+    left: 0;
+}
+
+.container {
+    width: 920px;
+    padding: 20px 15px;
+    text-align: left;
+    display: block;
+    margin: 0 auto;
+}
+
+.pagehead {
+    background: url('../images/pagehead.png') 0 0 no-repeat transparent;
+    margin: -15px 0 0 -62px;
+    padding: 40px 62px 1px;
+    position: relative;
+    width: 920px;
+    min-height: 200px;
+}
+
+.content {
+    width: 600px;
+    margin-left: 320px;
+}
+
+
+table tbody tr td {
+    padding: 0.6em 0 0 0;
+}
+
+table tbody tr th {
+    text-align: right;
+    padding: 0.6em 20px 0 0;
+    width: 100px;
+    font-size: 14px;
+    vertical-align: top;
+    line-height: 28px;
+}
+
+
+.post-info {
+    clear: both;
+    margin: 0;
+}
+
+.post-info ul {
+    margin: 0.4em 0 0;
+}
+
+.post-info ul li {
+    float: left;
+    margin: 0;
+}
+
+.inline-tag-list li {
+    display: inline;
+    padding: 0 7px 5px 0;
+}
+
+a.tag {
+    background: transparent url(../images/tag_right.png) no-repeat right top;
+    color: #fff;
+    cursor: pointer;
+    display: block;
+    float: left;
+    font-size: 11px;
+    height: 19px;
+    padding: 0 2px 0 0;
+    text-decoration: none;
+    vertical-align: middle;
+    text-shadow: 0px 0px 2px #333;
+}
+
+a.tag:hover {
+    background-position: right bottom;
+}
+
+a.tag span {
+    background: transparent url(../images/tag_left.png) no-repeat left top;
+    display: block;
+    float: left;
+    height: 15px;
+    line-height: 15px;
+    padding: 1px 7px 3px 19px;
+    vertical-align: top;
+    white-space: nowrap;
+}
+
+a.tag:hover span {
+    background-position: left bottom;
+}
+
+.hr-styled {
+    clear: both;
+    height: 60px;
+    margin: 0;
+    background: url('../images/separator.png') center 26px no-repeat;
+}
+
+.clear {
+    clear: both;
+    height: 10px;
+    margin: 0;
+}
+
+.hr-unstyled {
+    clear: both;
+    height: 40px;
+    margin: 0;
+    background: url('../images/separator2.png') center 19px no-repeat;
+}
+
+.edit-box {
+    clear: both;
+    text-align: right;
+    position: absolute;
+    top: 0;
+    right: 10px;
+    //visibility: hidden;
+    //line-height: 2em;
+    //padding: 10px 0;
+}
+
+.entry {
+    position: relative;
+}
+
+.footer {
+    background: #333;
+    color: #fff;
+    margin-top: 20px;
+    clear: both;
+}
+
+.entry img {
+    border: 10px solid #eee;
+    margin: 20px 0 20px -40px;
+    width: 620px;
+}
