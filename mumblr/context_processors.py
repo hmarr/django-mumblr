@@ -1,5 +1,3 @@
-from signed.signed import unsign
-
 def auth(request):
     if hasattr(request, 'user'):
         return {'user': request.user}
