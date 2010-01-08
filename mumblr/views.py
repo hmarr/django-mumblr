@@ -4,7 +4,6 @@ from django.template import RequestContext
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
-from django import forms
 from django.conf import settings
 
 from signed.signed import sign
@@ -15,16 +14,15 @@ import entrytypes
 from utils import csrf_protect
 
 
-def log_in(request, redirect_field_name=REDIRECT_FIELD_NAME,
-           authentication_form=AuthenticationForm):
+def log_in(request):
     """Log a user in to the site. Usually, this would be handled by Django
     authentication, but as we are using MongoDB this must be done manually to
     avoid the sessions framework.
     """
-    redirect_to = request.REQUEST.get(redirect_field_name, 
+    redirect_to = request.REQUEST.get(REDIRECT_FIELD_NAME, 
                                       reverse('recent-entries'))
     if request.method == 'POST':
-        form = authentication_form(data=request.POST)
+        form = AuthenticationForm(data=request.POST)
         if form.is_valid():
             user = form.get_user()
             response = HttpResponseRedirect(redirect_to)
@@ -32,7 +30,7 @@ def log_in(request, redirect_field_name=REDIRECT_FIELD_NAME,
             response.set_cookie('userid', sign(user.id.encode('utf8')))
             return response
     else:
-        form = authentication_form()
+        form = AuthenticationForm()
     # Present user with log in screen
     context = {
         'title': 'Log In',
