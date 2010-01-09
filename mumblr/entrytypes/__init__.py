@@ -35,15 +35,23 @@ class EntryType(Document):
     tags = ListField(StringField(max_length=50))
     comments = ListField(EmbeddedDocumentField(Comment))
     published = BooleanField(default=True)
-    publish_date = DateTimeField(required=False, default=datetime.now)
+    publish_date = DateTimeField(required=False, default=None)
+    expiry_date = DateTimeField(required=False, default=None)
     link_url = StringField()
 
     _types = {}
 
     @queryset_manager
     def live_entries(queryset):
-        return queryset(published=True,
-                        publish_date__lte=datetime.now())
+        return queryset(# Is it published
+                        Q(published=True) &
+                        # Is it past publish date
+                        (Q(publish_date__lte=datetime.now()) |
+                         Q(publish_date=None)) &
+                        # Is it earlier than expiry date
+                        (Q(expiry_date__gt=datetime.now()) |
+                         Q(expiry_date=None))
+                        )
 
     @permalink
     def get_absolute_url(self):
@@ -66,6 +74,7 @@ class EntryType(Document):
         tags = forms.CharField(required=False)
         published = forms.BooleanField(required=False)
         publish_date = forms.DateTimeField(widget=SelectDateWidget(required=False), required=False)
+        expiry_date = forms.DateTimeField(widget=SelectDateWidget(required=False), required=False)
 
     @classmethod
     def register(cls, entry_type):

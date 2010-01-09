@@ -30,7 +30,13 @@
     {% endif %}
     {{ entry.title|title|truncatewords:10|safe }}</a></span>&nbsp;<span class="date">{{ entry.date|date:"F jS, Y" }}</span>
     <div class="edit-box">
-    {% if not entry.published %}<span class="unpublished">Unpublished</span>&nbsp;{% endif %}
+    {% if not entry.published %}<span class="unpublished">Unpublished</span>&nbsp;
+    {% comment %}
+    {% else %}
+        {% if entry.publish_date >= datenow %}<span class="unpublished">Future Publication</span>&nbsp;{% endif %}
+        {% if entry.expiry_date < datenow %}<span class="unpublished">Expired</span>&nbsp;{% endif %}
+    {% endcomment %}
+    {% endif %}
     <a class="mbl-button" href="{% url edit-entry entry.id %}">Edit</a>&nbsp;<a class="mbl-button mbl-button-primary" href="{% url delete-entry entry.id %}?{% csrf_url_token %}">Delete</a></div>
     </li>
 {% endfor %}

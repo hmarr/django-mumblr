@@ -59,6 +59,7 @@ def admin(request):
         'title': 'Mumblr Admin',
         'entry_types': entry_types,
         'entries': entries,
+        'datenow': datetime.now(),
     }
     return render_to_response('mumblr/admin.html', context,
                               context_instance=RequestContext(request))
