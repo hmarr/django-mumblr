@@ -50,7 +50,9 @@ a:hover {
     font-size: 12px;
     color: #c00;
     border: 1px solid #c00;
+    border-radius: 3px;
     -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
     padding: 3px;
 }
 
@@ -78,7 +80,10 @@ h2 {
     padding: 10px 0;
     margin-bottom: 5px;
     line-height: 28px;
-    padding-right: 100px;
+}
+
+h3 {
+    padding-right: 120px;
 }
 
 h2 a, h3 a, h4 a {
@@ -165,11 +170,15 @@ form table {
     margin-left: -120px;
 }
 
+select {
+    font-size: 14px;
+}
+
 input[type=text], input[type=password], textarea {
     border: 2px solid #eee;
     padding: 3px;
-    font-size: 14px;
     width: 400px;
+    font-size: 14px;
 }
 
 input[type=text]:focus, input[type=password]:focus, textarea:focus {
@@ -243,6 +252,8 @@ a.mbl-button-primary:hover, input[type=submit]:hover {
     border-bottom: 1px dotted #CFD0C6;
     list-style-type: none;
     padding: 5px 0 4px 0;
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 .lined-list li.first {
@@ -276,9 +287,7 @@ p, ul, ol, blockquote, table, pre code {
     margin-bottom: 20px;
 }
 
-.fold-box a, .fold-box h1, .fold-box h2, .fold-box h3, .fold-box h4 {
-    color: #fff
-}
+.fold-box a, .fold-box h1, .fold-box h2, .fold-box h3, .fold-box h4 { color: #fff; }
 
 .fold-box span.fold {
     background: url('../images/tab.png') 0 0 no-repeat;
@@ -404,6 +413,14 @@ a.tag:hover span {
     position: absolute;
     top: 0;
     right: 10px;
+}
+
+li .edit-box {
+    top: 5px;
+    right: 0px;
+    background: #fff;
+    padding-left: 5px;
+    z-index: 100;
 }
 
 .float-right {
