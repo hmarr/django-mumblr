@@ -1,9 +1,38 @@
 {% extends "mumblr/base.html" %}
 
+{% load mumblr_csrf %}
+
 {% block content %}
-<ul>
+<h3>New Post</h3>
+<ul class="inline">
 {% for type in entry_types %}
-    <li><a href="{% url add-entry type %}">Add {{ type }} entry</a></li>
+    <li><a class="mbl-button" href="{% url add-entry type %}">{{ type }}</a></li>
+{% endfor %}
+</ul>
+<div class="clear"></div>
+<h3>All Entries</h3>
+<ul class="lined-list">
+{% for entry in entries %}
+    {% if forloop.last %}
+    <li class="last">
+    {% else %}
+        {% if forloop.first %}
+        <li class="first">
+        {% else %}
+        <li>
+        {% endif %}
+    {% endif %}
+    <span class="title">
+    {% if entry.link_url %}
+        <a href="{{ entry.link_url }}">
+    {% else %}
+        <a href="{{ entry.get_absolute_url }}">
+    {% endif %}
+    {{ entry.title|title|safe }}</a></span>&nbsp;<span class="date">{{ entry.date|date:"F j, Y" }}</span>
+    <div class="float-right">
+    {% if not entry.published %}<span class="unpublished">Unpublished</span>&nbsp;{% endif %}
+    <a class="mbl-button" href="{% url edit-entry entry.id %}">Edit</a>&nbsp;<a class="mbl-button mbl-button-primary" href="{% url delete-entry entry.id %}?{% csrf_url_token %}">Delete</a></div>
+    </li>
 {% endfor %}
 </ul>
 {% endblock %}

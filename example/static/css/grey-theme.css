@@ -46,7 +46,15 @@ a:hover {
     color: #CFD0C6;
 }
 
-h1, h2, h3, h4, h5, h6, .date, a.tag, blockquote, table tbody tr th {
+.unpublished {
+    font-size: 12px;
+    color: #c00;
+    border: 1px solid #c00;
+    -moz-border-radius: 3px;
+    padding: 3px;
+}
+
+h1, h2, h3, h4, h5, h6, .date, a.tag, blockquote, table tbody tr th, .title {
     font-family: 'Museo Slab', Georgia, Helvetica, Arial, Verdana, sans-serif;
 }
 
@@ -110,7 +118,8 @@ pre code {
     border: 10px solid #eee;
     padding: 15px 10px 15px 30px;
     display: block;
-    margin: 20px 0 20px -40px;
+    margin-left: -40px !important;
+    margin-bottom: 30px !important;
     width: 580px;
 }
 
@@ -132,6 +141,11 @@ ol, ul {
 
 ul li { list-style-type: square; }
 ol li { list-style-type: decimal; }
+
+.inline li {
+    display: inline;
+    list-style-type: none;
+}
 
 body {
     font-size: 100%;
@@ -220,8 +234,28 @@ a.mbl-button-primary:hover, input[type=submit]:hover {
  *
  */
 
-p, ul, ol, blockquote, table {
-    margin: 0.5em 0 ;
+.lined-list {
+    padding: 4px 0;
+}
+
+.lined-list li {
+    position: relative;
+    border-bottom: 1px dotted #CFD0C6;
+    list-style-type: none;
+    padding: 5px 0 4px 0;
+}
+
+.lined-list li.first {
+    background: url('../images/separator2.png') center top no-repeat;
+}
+
+.lined-list li.last {
+    background: url('../images/separator2.png') center bottom no-repeat;
+    border-bottom: none;
+}
+
+p, ul, ol, blockquote, table, pre code {
+    margin: 0.6em 0 ;
 }
 
 .left-column {
@@ -353,7 +387,7 @@ a.tag:hover span {
 
 .clear {
     clear: both;
-    height: 10px;
+    height: 20px;
     margin: 0;
 }
 
@@ -370,9 +404,10 @@ a.tag:hover span {
     position: absolute;
     top: 0;
     right: 10px;
-    //visibility: hidden;
-    //line-height: 2em;
-    //padding: 10px 0;
+}
+
+.float-right {
+    float: right;
 }
 
 .entry {

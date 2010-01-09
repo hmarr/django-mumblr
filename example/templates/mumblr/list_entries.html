@@ -16,7 +16,7 @@
             {% else %}
                 <a href="{{ entry.get_absolute_url }}">
             {% endif %}
-            {{ entry.title|safe }}</a></h3>
+            {{ entry.title|title|safe }}</a></h3>
             <div class="post-info">
             <p class="date">{{ entry.date|date:"F j, Y" }}</p>
             {% if entry.tags %}
