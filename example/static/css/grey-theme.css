@@ -391,7 +391,7 @@ a.tag {
     cursor: pointer;
     display: block;
     float: left;
-    font-size: 11px;
+    font-size: 12px;
     height: 19px;
     padding: 0 2px 0 0;
     text-decoration: none;
@@ -408,7 +408,7 @@ a.tag span {
     display: block;
     float: left;
     height: 15px;
-    line-height: 15px;
+    line-height: 16px;
     padding: 1px 7px 3px 19px;
     vertical-align: top;
     white-space: nowrap;
@@ -469,7 +469,7 @@ li .edit-box {
     clear: both;
 }
 
-.entry img {
+.content img {
     border: 10px solid #eee;
     margin: 20px 0 20px -40px;
     width: 620px;
