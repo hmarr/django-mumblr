@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.utils.hashcompat import md5_constructor
 from django.utils.cache import patch_vary_headers
+from django.contrib.auth.models import AnonymousUser
 
 from signed.signed import unsign
 from random import randrange
@@ -19,7 +20,7 @@ class AuthMiddleware(object):
             userid = unsign(request.COOKIES['userid'])
             request.user = get_user(userid)
         except:
-            pass
+            request.user = AnonymousUser()
 
 
 if not getattr(settings, 'CSRF_COOKIE_NAME', None):
