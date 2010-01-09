@@ -39,13 +39,22 @@ pre {
 a {
     text-decoration: none;
     color: #B6B7AB;
+    outline: none;
 }
 
 a:hover {
     color: #CFD0C6;
 }
 
-h1, h2, h3, h4, h5, h6, .date, a.tag, blockquote, table tbody tr th {
+.unpublished {
+    font-size: 12px;
+    color: #c00;
+    border: 1px solid #c00;
+    -moz-border-radius: 3px;
+    padding: 3px;
+}
+
+h1, h2, h3, h4, h5, h6, .date, a.tag, blockquote, table tbody tr th, .title {
     font-family: 'Museo Slab', Georgia, Helvetica, Arial, Verdana, sans-serif;
 }
 
@@ -55,14 +64,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 h1 {
-    color: #fff;
     font-size: 2.6em;
-    background: #333;
-    padding: 10px 20px 10px 40px;
-    position: absolute;
-    top: 40px;
-    left: 22px;
-    max-width: 170px;
     line-height: 1em;
 }
 
@@ -105,12 +107,6 @@ blockquote {
 }
 
 code {
-    background: #fff;
-    border: 10px solid #eee;
-    padding: 15px 10px 15px 30px;
-    display: block;
-    margin: 20px 0 20px -40px;
-    width: 580px;
     font-family: Monaco, "Courier New", "Courier", monospace;
     white-space: nowrap;
     font-size: 11px;
@@ -118,6 +114,13 @@ code {
 
 pre code {
     white-space: pre-wrap;
+    background: #fff;
+    border: 10px solid #eee;
+    padding: 15px 10px 15px 30px;
+    display: block;
+    margin-left: -40px !important;
+    margin-bottom: 30px !important;
+    width: 580px;
 }
 
 /*
@@ -138,6 +141,11 @@ ol, ul {
 
 ul li { list-style-type: square; }
 ol li { list-style-type: decimal; }
+
+.inline li {
+    display: inline;
+    list-style-type: none;
+}
 
 body {
     font-size: 100%;
@@ -226,24 +234,53 @@ a.mbl-button-primary:hover, input[type=submit]:hover {
  *
  */
 
-p, ul, ol, blockquote, table {
-    margin: 0.5em 0 ;
+.lined-list {
+    padding: 4px 0;
 }
 
-.admin-box {
+.lined-list li {
+    position: relative;
+    border-bottom: 1px dotted #CFD0C6;
+    list-style-type: none;
+    padding: 5px 0 4px 0;
+}
+
+.lined-list li.first {
+    background: url('../images/separator2.png') center top no-repeat;
+}
+
+.lined-list li.last {
+    background: url('../images/separator2.png') center bottom no-repeat;
+    border-bottom: none;
+}
+
+p, ul, ol, blockquote, table, pre code {
+    margin: 0.6em 0 ;
+}
+
+.left-column {
+    position: absolute;
+    left: 22px;
+    top: 50px;
+    max-width: 220px;
+}
+
+.fold-box {
     background: #333;
     padding: 10px 20px 10px 40px;
-    color: #fff;
+    color: #aaa;
     display: block;
-    position: absolute;
+    position: relative;
     clear: both;
-    top: 150px;
-    left: 22px;
-    line-height: 24px;
-    max-width: 170px;
+    max-width: 180px;
+    margin-bottom: 20px;
 }
 
-h1 span, .admin-box span.fold {
+.fold-box a, .fold-box h1, .fold-box h2, .fold-box h3, .fold-box h4 {
+    color: #fff
+}
+
+.fold-box span.fold {
     background: url('../images/tab.png') 0 0 no-repeat;
     width: 20px;
     height: 8px;
@@ -263,10 +300,10 @@ h1 span, .admin-box span.fold {
 .pagehead {
     background: url('../images/pagehead.png') 0 0 no-repeat transparent;
     margin: -15px 0 0 -62px;
-    padding: 40px 62px 1px;
+    padding: 50px 62px 1px;
     position: relative;
     width: 920px;
-    min-height: 200px;
+    min-height: 300px;
 }
 
 .content {
@@ -350,7 +387,7 @@ a.tag:hover span {
 
 .clear {
     clear: both;
-    height: 10px;
+    height: 20px;
     margin: 0;
 }
 
@@ -367,9 +404,10 @@ a.tag:hover span {
     position: absolute;
     top: 0;
     right: 10px;
-    //visibility: hidden;
-    //line-height: 2em;
-    //padding: 10px 0;
+}
+
+.float-right {
+    float: right;
 }
 
 .entry {

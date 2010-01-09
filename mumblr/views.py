@@ -54,9 +54,11 @@ def admin(request):
     """Display the main admin page.
     """
     entry_types = [e.type for e in entrytypes.EntryType._types.values()]
+    entries = entrytypes.EntryType.objects.order_by('-date')[:10]
     context = {
         'title': 'Mumblr Admin',
         'entry_types': entry_types,
+        'entries': entries,
     }
     return render_to_response('mumblr/admin.html', context,
                               context_instance=RequestContext(request))
@@ -154,7 +156,7 @@ def recent_entries(request):
     """Show the [n] most recent entries.
     """
     num = getattr(settings, 'MUMBLR_NUM_RECENT_ENTRIES', 10)
-    entries = entrytypes.EntryType.objects.order_by('-date')[:num]
+    entries = entrytypes.EntryType.live_entries().order_by('-date')[:num]
     context = {
         'title': 'Recent Entries',
         'entries': entries,
