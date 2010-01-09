@@ -2,7 +2,7 @@
 
 {% block content %}
 <div class="post-info">
-<p class="date">{{ entry.date|date:"F j, Y" }}</p>
+<p><a href="" class="comments">21 Comments</a>&nbsp;<span class="date">{{ entry.date|date:"F jS, Y" }}</span></p>
 {% if entry.tags %}
     <ul class="inline-tag-list">
     {% for tag in entry.tags %}

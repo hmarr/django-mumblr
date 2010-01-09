@@ -37,7 +37,8 @@
             {% endif %}
             </div> <!-- /left-column -->
 
-            <h2>{{ title|safe }}</h2>
+            <h2>{{ title|title|safe }}</h2>
+            <div class="clear"></div>
 
 
             {% block content %}{% endblock %}
