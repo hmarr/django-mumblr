@@ -28,6 +28,11 @@ body {
     src: url('../other/Museo_Slab_500.otf') format("opentype");
 }
 
+.amp {
+    font-family: Baskerville, "Hoefler Text", "Museo Slab" "Goudy Old Style","Palatino","Book Antiqua",serif;
+    font-style: italic;
+}
+
 em {
     font-style: italic;
 }
@@ -151,7 +156,7 @@ code {
     font-size: 11px;
 }
 
-pre code {
+pre code, pre {
     white-space: pre-wrap;
     background: #fff;
     border: 10px solid #eee;
@@ -175,7 +180,7 @@ ol, ul {
     padding: 0;
     margin: 0;
     vertical-align: top;
-    margin: 10px 0;
+    margin: 20px 0 !important;
 }    
 
 ul li { list-style-type: square; }

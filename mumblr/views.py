@@ -186,13 +186,10 @@ def entry_detail(request, date, slug):
         if form.is_valid():
             # Get necessary post data from the form
             comment = entrytypes.Comment(**form.cleaned_data)
-            # Append comment to existing entry comments
-            if entry.comments:
-                entry.comments.append(comment)
-            else:
-                entry.comments=[comment]
-            # Save the entry to the DB
-            entry.save()
+            # Update entry with comment
+            q = entrytypes.EntryType.objects(id=entry.id)
+            q.update(push__comments=comment)
+
             return HttpResponseRedirect(entry.get_absolute_url())
     else:
         form = form_class()
