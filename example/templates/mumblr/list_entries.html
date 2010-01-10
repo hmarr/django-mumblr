@@ -1,6 +1,7 @@
 {% extends "mumblr/base.html" %}
 
 {% load mumblr_csrf %}
+{% load typogrify %}
 
 {% block content %}
 {% for entry in entries %}
@@ -16,7 +17,7 @@
             {% else %}
                 <a href="{{ entry.get_absolute_url }}">
             {% endif %}
-            {{ entry.title|title|safe }}</a></h3>
+            {{ entry.title|title|safe|typogrify }}</a></h3>
             <div class="post-info">
             <p><a href="{{ entry.get_absolute_url }}#comments" class="comments">{{ entry.comments|length|default:0|safe }} Comments</a>&nbsp;<span class="date">{{ entry.date|date:"F jS, Y" }}</span></p>
             {% if entry.tags %}
@@ -28,7 +29,7 @@
             {% endif %}
             <div class="clear"></div>
             </div>
-        {{ entry.rendered_content|safe }}
+        {{ entry.rendered_content|safe|typogrify }}
         {% if not forloop.last %}
             <div class="hr-styled"></div>
         {% endif %}

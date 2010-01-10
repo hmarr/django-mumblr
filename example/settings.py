@@ -52,6 +52,7 @@ TEMPLATE_DIRS = (
 )
 
 INSTALLED_APPS = (
+    'typogrify',
     'signed',
     'mumblr',
 )
