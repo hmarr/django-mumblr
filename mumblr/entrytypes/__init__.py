@@ -15,6 +15,11 @@ class Comment(EmbeddedDocument):
     body = StringField()
     date = DateTimeField(required=True, default=datetime.now)
 
+    class CommentForm(forms.Form):
+
+        author = forms.CharField()
+        body = forms.CharField(widget=forms.Textarea)
+
 
 class EntryType(Document):
     """The base class for entry types. New types should inherit from this and
@@ -69,12 +74,17 @@ class EntryType(Document):
         super(EntryType, self).save()
 
     class AdminForm(forms.Form):
+
         title = forms.CharField()
         slug = forms.CharField()
         tags = forms.CharField(required=False)
         published = forms.BooleanField(required=False)
-        publish_date = forms.DateTimeField(widget=SelectDateWidget(required=False), required=False)
-        expiry_date = forms.DateTimeField(widget=SelectDateWidget(required=False), required=False)
+        publish_date = forms.DateTimeField(
+            widget=SelectDateWidget(required=False),
+            required=False)
+        expiry_date = forms.DateTimeField(
+            widget=SelectDateWidget(required=False),
+            required=False)
 
     @classmethod
     def register(cls, entry_type):

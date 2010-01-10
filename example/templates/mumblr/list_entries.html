@@ -18,7 +18,7 @@
             {% endif %}
             {{ entry.title|title|safe }}</a></h3>
             <div class="post-info">
-            <p><a href="{{ entry.get_absolute_url }}#comments" class="comments">21 Comments</a>&nbsp;<span class="date">{{ entry.date|date:"F jS, Y" }}</span></p>
+            <p><a href="{{ entry.get_absolute_url }}#comments" class="comments">{{ entry.comments|length|default:0|safe }} Comments</a>&nbsp;<span class="date">{{ entry.date|date:"F jS, Y" }}</span></p>
             {% if entry.tags %}
                 <ul class="inline-tag-list">
                 {% for tag in entry.tags %}

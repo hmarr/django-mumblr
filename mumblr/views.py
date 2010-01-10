@@ -55,6 +55,7 @@ def admin(request):
     """
     entry_types = [e.type for e in entrytypes.EntryType._types.values()]
     entries = entrytypes.EntryType.objects.order_by('-date')[:10]
+
     context = {
         'title': 'Mumblr Admin',
         'entry_types': entry_types,
@@ -177,10 +178,31 @@ def entry_detail(request, date, slug):
     if not entry:
         raise Http404
 
+    # Select correct form for entry type
+    form_class = entrytypes.Comment.CommentForm
+
+    if request.method == 'POST':
+        form = form_class(request.POST)
+        if form.is_valid():
+            # Get necessary post data from the form
+            comment = entrytypes.Comment(**form.cleaned_data)
+            # Append comment to existing entry comments
+            if entry.comments:
+                entry.comments.append(comment)
+            else:
+                entry.comments=[comment]
+            # Save the entry to the DB
+            entry.save()
+            return HttpResponseRedirect(entry.get_absolute_url())
+    else:
+        form = form_class()
+
     entry_url = entry.link_url or entry.get_absolute_url()
     context = {
         'title': '<a href="%s">%s</a>' % (entry_url, entry.title),
         'entry': entry,
+        'datenow': datetime.now(),
+        'form': form,
     }
     return render_to_response('mumblr/entry_detail.html', context,
                               context_instance=RequestContext(request))

@@ -1,12 +1,13 @@
 {% extends "mumblr/base.html" %}
 
 {% load mumblr_csrf %}
+{% load smart_if %}
 
 {% block content %}
 <h3>New Post</h3>
 <ul class="inline">
 {% for type in entry_types %}
-    <li><a class="mbl-button" href="{% url add-entry type %}">{{ type }}</a></li>
+    <li><a class="mbl-button" href="{% url add-entry type %}" title="New {{ type }} post">{{ type }}</a></li>
 {% endfor %}
 </ul>
 <div class="clear"></div>
@@ -26,18 +27,17 @@
     {% if entry.link_url %}
         <a href="{{ entry.link_url }}">
     {% else %}
-        <a href="{{ entry.get_absolute_url }}">
+        <a href="{{ entry.get_absolute_url }}" title="{{ entry.title|title|safe }}">
     {% endif %}
-    {{ entry.title|title|truncatewords:10|safe }}</a></span>&nbsp;<span class="date">{{ entry.date|date:"F jS, Y" }}</span>
+    {{ entry.title|title|truncatewords:7|safe }}</a></span>&nbsp;<span class="date">{{ entry.date|date:"F jS, Y" }}</span>
     <div class="edit-box">
     {% if not entry.published %}<span class="unpublished">Unpublished</span>&nbsp;
-    {% comment %}
     {% else %}
-        {% if entry.publish_date >= datenow %}<span class="unpublished">Future Publication</span>&nbsp;{% endif %}
-        {% if entry.expiry_date < datenow %}<span class="unpublished">Expired</span>&nbsp;{% endif %}
-    {% endcomment %}
+        {% if entry.publish_date >= datenow and entry.publish_date %}<span class="unpublished">Future Publication</span>&nbsp;{% endif %}
+        {% if entry.expiry_date < datenow and entry.expiry_date %}<span class="unpublished">Expired</span>&nbsp;{% endif %}
     {% endif %}
-    <a class="mbl-button" href="{% url edit-entry entry.id %}">Edit</a>&nbsp;<a class="mbl-button mbl-button-primary" href="{% url delete-entry entry.id %}?{% csrf_url_token %}">Delete</a></div>
+    <a href="{{ entry.get_absolute_url }}#comments" title="Comments" class="comments">{{ entry.comments|length|default:0|safe }}</a>
+    <a class="mbl-button" href="{% url edit-entry entry.id %}" title="Edit post">Edit</a>&nbsp;<a class="mbl-button mbl-button-primary" href="{% url delete-entry entry.id %}?{% csrf_url_token %}" title="Delete post">Delete</a></div>
     </li>
 {% endfor %}
 </ul>

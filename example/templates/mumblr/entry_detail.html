@@ -1,8 +1,10 @@
 {% extends "mumblr/base.html" %}
 
+{% load mumblr_csrf %}
+
 {% block content %}
 <div class="post-info">
-<p><a href="{{ entry.get_absolute_url }}#comments" class="comments">21 Comments</a>&nbsp;<span class="date">{{ entry.date|date:"F jS, Y" }}</span></p>
+<p><a href="{{ entry.get_absolute_url }}#comments" class="comments">{{ entry.comments|length|default:0|safe }} Comments</a>&nbsp;<span class="date">{{ entry.date|date:"F jS, Y" }}</span></p>
 {% if entry.tags %}
     <ul class="inline-tag-list">
     {% for tag in entry.tags %}
@@ -13,4 +15,40 @@
 <div class="clear"></div>
 </div>
 {{ entry.rendered_content|safe }}
+<div class="hr-styled"></div>
+{% if entry.expiry_date %}
+This post will expire in {{ entry.expiry_date|timeuntil:datenow }}    
+<div class="hr-unstyled"></div>
+{% endif %}
+<h3>Remarks</h3>
+<a name="comments"></a>
+{% if entry.comments %}
+    <ul class="comments-list">
+    {% for comment in entry.comments %}
+        <li><div class="comment-info">
+        <strong>{{ comment.author }}</strong> <span class="comment-time">{{ comment.date|timesince:datenow }} ago</span>
+        {% if user.is_authenticated %}        
+        <div class="edit-box">
+            <a class="mbl-button mbl-button-primary" href="">Delete</a>
+        </div>
+        {% endif %}
+        </div>
+        <p>{{ comment.body }}</p>
+        </li>
+    {% endfor %}
+    </ul>
+{% else %}
+There are no comments for this post.
+{% endif %}
+<div class="clear"></div>
+<h3>Leave A Reply</h3>
+<form action="" method="post">
+    <table>
+        {{ form }}
+        <tr>
+            <th></th><td><input type="submit" value="Save" /></td>
+        </tr>
+    </table>
+    {% csrf_form_token %}
+</form>
 {% endblock %}

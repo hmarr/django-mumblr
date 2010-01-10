@@ -8,6 +8,15 @@
  */
 
 
+body {
+    font-size: 100%;
+    font-size: 0.875em;
+    line-height: 21px;
+    font-family: Helvetica, Verdana;
+    background: url('../images/bg.png') 0 0 repeat-x #fff;
+}
+
+
 /*
  *
  * Typography
@@ -97,19 +106,14 @@ h4 {
     font-size: 1.2em;
 }
 
-.date {
+.date, .comment-time {
     color: #ccc;
-    vertical-align: middle;
-}
-
-.title {
-    vertical-align: middle;
 }
 
 a.comments {
     font-weight: bold;
     font-size: 12px;
-    padding: 3px 5px;
+    padding: 4px 5px 2px 5px;
     border: 2px solid #B6B7AB;
     color: #B6B7AB;
     border-radius: 5px;
@@ -182,12 +186,37 @@ ol li { list-style-type: decimal; }
     list-style-type: none;
 }
 
-body {
-    font-size: 100%;
-    font-size: 0.875em;
-    line-height: 21px;
-    font-family: Helvetica, Verdana;
-    background: url('../images/bg.png') 0 0 repeat-x #fff;
+.lined-list {
+    padding: 4px 0;
+}
+
+.lined-list li {
+    position: relative;
+    border-bottom: 1px dotted #CFD0C6;
+    list-style-type: none;
+    padding: 5px 0 4px 0;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.lined-list li.first {
+    background: url('../images/separator2.png') center top no-repeat;
+}
+
+.lined-list li.last {
+    background: url('../images/separator2.png') center bottom no-repeat;
+    border-bottom: none;
+}
+
+.comments-list li {
+    list-style-type: none;
+    border-top: 1px solid #CFD0C6;
+}
+
+.comments-list li .comment-info {
+    position: relative;
+    padding: 5px 0 4px 0;
+    border-bottom: 1px dotted #CFD0C6;
 }
 
 /*
@@ -207,7 +236,7 @@ select {
 input[type=text], input[type=password], textarea {
     border: 2px solid #eee;
     padding: 3px;
-    width: 590px;
+    width: 600px;
     font-size: 14px;
 }
 
@@ -273,29 +302,7 @@ a.mbl-button-primary:hover, input[type=submit]:hover {
  *
  */
 
-.lined-list {
-    padding: 4px 0;
-}
-
-.lined-list li {
-    position: relative;
-    border-bottom: 1px dotted #CFD0C6;
-    list-style-type: none;
-    padding: 5px 0 4px 0;
-    white-space: nowrap;
-    overflow: hidden;
-}
-
-.lined-list li.first {
-    background: url('../images/separator2.png') center top no-repeat;
-}
-
-.lined-list li.last {
-    background: url('../images/separator2.png') center bottom no-repeat;
-    border-bottom: none;
-}
-
-p, ul, ol, blockquote, table, pre code {
+p, ul, ol, blockquote, pre code {
     margin: 0.6em 0 ;
 }
 
@@ -352,12 +359,12 @@ p, ul, ol, blockquote, table, pre code {
 
 
 table tbody tr td {
-    padding: 0.6em 0 0 0;
+    padding: 0 0 0.6em 0;
 }
 
 table tbody tr th {
     text-align: right;
-    padding: 0.6em 20px 0 0;
+    padding: 0 20px 0.6em 0;
     width: 100px;
     font-size: 14px;
     vertical-align: top;
@@ -433,9 +440,9 @@ a.tag:hover span {
 
 .hr-unstyled {
     clear: both;
-    height: 40px;
+    height: 60px;
     margin: 0;
-    background: url('../images/separator2.png') center 19px no-repeat;
+    background: url('../images/separator2.png') center 29px no-repeat;
 }
 
 .edit-box {
