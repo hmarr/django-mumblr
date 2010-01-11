@@ -4,6 +4,7 @@ from django.template import RequestContext
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
+from django.core.paginator import Paginator, InvalidPage, EmptyPage
 from django.conf import settings
 
 from signed.signed import sign
@@ -154,11 +155,16 @@ def delete_entry(request, entry_id):
         entrytypes.EntryType.objects.with_id(entry_id).delete()
     return HttpResponseRedirect(reverse('recent-entries'))
 
-def recent_entries(request):
+def recent_entries(request, page_number=1):
     """Show the [n] most recent entries.
     """
-    num = getattr(settings, 'MUMBLR_NUM_RECENT_ENTRIES', 10)
-    entries = entrytypes.EntryType.live_entries().order_by('-date')[:num]
+    num = getattr(settings, 'MUMBLR_NUM_ENTRIES_PER_PAGE', 10)
+    entry_list = entrytypes.EntryType.live_entries().order_by('-date')
+    paginator = Paginator(entry_list, num)
+    try:
+        entries = paginator.page(page_number)
+    except (EmptyPage, InvalidPage):
+        entries = paginator.page(paginator.num_pages)
     context = {
         'title': 'Recent Entries',
         'entries': entries,
@@ -204,11 +210,17 @@ def entry_detail(request, date, slug):
     return render_to_response('mumblr/entry_detail.html', context,
                               context_instance=RequestContext(request))
 
-def tagged_entries(request, tag):
+def tagged_entries(request, tag=None, page_number=1):
     """Show a list of all entries with the given tag.
     """
     tag = tag.strip().lower()
-    entries = entrytypes.EntryType.live_entries(tags=tag).order_by('-date')
+    num = getattr(settings, 'MUMBLR_NUM_ENTRIES_PER_PAGE', 10)
+    entry_list = entrytypes.EntryType.live_entries(tags=tag).order_by('-date')
+    paginator = Paginator(entry_list, num)
+    try:
+        entries = paginator.page(page_number)
+    except (EmptyPage, InvalidPage):
+        entries = paginator.page(paginator.num_pages)
     context = {
         'title': 'Entries Tagged "%s"' % tag,
         'entries': entries,
