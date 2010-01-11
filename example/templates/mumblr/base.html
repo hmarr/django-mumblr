@@ -13,28 +13,33 @@
             <div class="content">
 
             <div class="left-column">
-            <div class="fold-box"><span class="fold"></span>
-            <h1><a href="{% url recent-entries %}">Mumblr</a></h1>
-            </div>
+                <div class="fold-box">
+                    <span class="fold"></span>
+                    <div class="fold-box-padder">
+                        <h1><a href="{% url recent-entries %}">Mumblr</a></h1>
+                    </div>
+                </div>
 
-            {% if user.is_authenticated %}
-            <div class="fold-box">
-                <span class="fold"></span>
-                <h4>
-                {% if user.first_name %}
-                    {{ user.first_name }} 
-                    {% if user.last_name %}
-                        {{ user.last_name }} 
-                    {% endif %}
-                {% else %}
-                    {{ user.email }}
+                {% if user.is_authenticated %}
+                <div class="fold-box">
+                    <span class="fold"></span>
+                    <div class="fold-box-padder">
+                        <h4>
+                        {% if user.first_name %}
+                            {{ user.first_name }} 
+                            {% if user.last_name %}
+                                {{ user.last_name }} 
+                            {% endif %}
+                        {% else %}
+                            {{ user.email }}
+                        {% endif %}
+                        </h4>
+                        <p>Welcome back!</p>
+                        <p><a class="mbl-button" href="{% url admin %}">Admin</a>&nbsp;<a class="mbl-button mbl-button-primary" href="{% url log-out %}?{% csrf_url_token %}">Log out</a>
+                        </p>
+                    </div>
+                </div>
                 {% endif %}
-                </h4>
-                <p>Welcome back!</p>
-                <p><a class="mbl-button" href="{% url admin %}">Admin</a>&nbsp;<a class="mbl-button mbl-button-primary" href="{% url log-out %}?{% csrf_url_token %}">Log out</a>
-                </p>
-            </div>
-            {% endif %}
             </div> <!-- /left-column -->
 
             <h2>{{ title|title|safe }}</h2>

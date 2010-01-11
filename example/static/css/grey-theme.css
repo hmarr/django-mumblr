@@ -14,6 +14,7 @@ body {
     line-height: 21px;
     font-family: Helvetica, Verdana;
     background: url('../images/bg.png') 0 0 repeat-x #fff;
+    text-align: center;
 }
 
 
@@ -24,8 +25,11 @@ body {
  */
 
 @font-face {
-    font-family: Museo Slab;
-    src: url('../other/Museo_Slab_500.otf') format("opentype");
+    font-family: 'Museo Slab';
+    font-style: normal;
+    font-weight: normal;
+    src: url('../other/Museo_Slab_500.eot'); /* IE */
+    src: local('Museo Slab'), url('Museo_Slab_500.woff') format('woff'), url('Museo_Slab_500.otf') format('opentype'), url('Museo_Slab_500.svg#MuseoSlab-500') format('svg');
 }
 
 .amp {
@@ -71,7 +75,7 @@ a:hover {
 }
 
 h1, h2, h3, h4, h5, h6, .date, a.tag, blockquote, table tbody tr th, .title {
-    font-family: 'Museo Slab', Georgia, Helvetica, Arial, Verdana, sans-serif;
+    font-family: "Museo Slab", Georgia, Helvetica, Arial, Verdana, sans-serif;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -151,9 +155,11 @@ blockquote {
 }
 
 code {
-    font-family: Monaco, "Courier New", "Courier", monospace;
     white-space: nowrap;
-    font-size: 11px;
+    line-height: 21px;
+    font-weight: bold;
+    padding: 1px 2px;
+    font-size: 14px;
 }
 
 pre code, pre {
@@ -165,6 +171,7 @@ pre code, pre {
     margin-left: -40px !important;
     margin-bottom: 30px !important;
     width: 580px;
+    position: relative;
 }
 
 /*
@@ -180,7 +187,7 @@ ol, ul {
     padding: 0;
     margin: 0;
     vertical-align: top;
-    margin: 20px 0 !important;
+    margin: 10px 0;
 }    
 
 ul li { list-style-type: square; }
@@ -232,6 +239,7 @@ ol li { list-style-type: decimal; }
 
 form table {
     margin-left: -120px;
+    position: relative;
 }
 
 select {
@@ -253,7 +261,7 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
 
 .errorlist {
     color: #c00;
-    padding: 3px 5px;
+    padding: 5px 5px 3px 5px;
     margin: 0;
     margin-bottom: 0.3em;
     border: 2px solid #c00;
@@ -320,13 +328,16 @@ p, ul, ol, blockquote, pre code {
 
 .fold-box {
     background: #333;
-    padding: 10px 20px 10px 40px;
     color: #aaa;
     display: block;
     position: relative;
     clear: both;
-    max-width: 180px;
     margin-bottom: 20px;
+}
+
+.fold-box .fold-box-padder {
+    padding: 10px 20px 10px 40px;
+    max-width: 180px;
 }
 
 .fold-box a, .fold-box h1, .fold-box h2, .fold-box h3, .fold-box h4 { color: #fff; }
@@ -348,6 +359,7 @@ p, ul, ol, blockquote, pre code {
     margin: 0 auto;
 }
 
+
 .pagehead {
     background: url('../images/pagehead.png') 0 0 no-repeat transparent;
     margin: -15px 0 0 -62px;
@@ -357,9 +369,13 @@ p, ul, ol, blockquote, pre code {
     min-height: 300px;
 }
 
+/* Ugly IE fix */
+* html .pagehead { margin: -15px 0 0 0; }
+
 .content {
     width: 600px;
     margin-left: 320px;
+    overflow: visible;
 }
 
 
@@ -375,6 +391,7 @@ table tbody tr th {
     vertical-align: top;
     line-height: 28px;
     color: #ccc;
+    font-weight: normal;
 }
 
 
@@ -420,7 +437,7 @@ a.tag span {
     display: block;
     float: left;
     height: 15px;
-    line-height: 16px;
+    line-height: 15px;
     padding: 1px 7px 3px 19px;
     vertical-align: top;
     white-space: nowrap;
@@ -485,4 +502,5 @@ li .edit-box {
     border: 10px solid #eee;
     margin: 20px 0 20px -40px;
     width: 620px;
+    position: relative;
 }
