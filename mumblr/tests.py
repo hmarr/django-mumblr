@@ -16,6 +16,8 @@ class MumblrTest(TestCase):
     # Stop ORM-related stuff from happening as we don't use the ORM
     def _fixture_setup(self):
         pass
+    def _fixture_teardown(self):
+        pass
 
     def login(self):
         return self.client.post('/admin/login/', self.user_data)
