@@ -37,8 +37,8 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
     'mumblr.middleware.CsrfMiddleware',
-    'mumblr.middleware.AuthMiddleware',
 )
 
 AUTHENTICATION_BACKENDS = (
@@ -61,6 +61,7 @@ INSTALLED_APPS = (
 )
 
 LOGIN_URL = '/admin/login/'
+LOGIN_REDIRECT_URL = '/admin/'
 
 TEST_RUNNER = 'testrunner.run_tests'
 
