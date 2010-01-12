@@ -6,6 +6,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
 from django.conf import settings
+from django.contrib.syndication.feeds import Feed
+from django.utils.feedgenerator import Atom1Feed
+from django.core.exceptions import ObjectDoesNotExist
 
 from signed.signed import sign
 from datetime import datetime
@@ -276,3 +279,18 @@ def tag_cloud(request):
     }
     return render_to_response('mumblr/tag_cloud.html', context,
                               context_instance=RequestContext(request))
+
+class RssFeed(Feed):
+    title = "Mumblr Recent Entries"
+    link = "/"
+    description = ""
+
+    def items(self):
+        return entrytypes.EntryType.live_entries().order_by('-date')[:30]
+
+    def item_pubdate(self, item):
+        return item.date
+
+class AtomFeed(RssFeed):
+    feed_type = Atom1Feed
+    subtitle = RssFeed.description
