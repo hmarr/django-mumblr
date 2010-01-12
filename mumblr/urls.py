@@ -3,7 +3,12 @@ from django.contrib.auth.views import login, logout
 
 from views import (recent_entries, tagged_entries, delete_entry, add_entry, 
                    edit_entry, entry_detail, admin, log_in, tag_cloud, log_out,
-                   delete_comment, archive)
+                   delete_comment, archive, RssFeed, AtomFeed)
+
+feeds = {
+    'rss': RssFeed,
+    'atom': AtomFeed,
+}
 
 urlpatterns = patterns('',
     url('^$', recent_entries, name='recent-entries'),
@@ -24,4 +29,6 @@ urlpatterns = patterns('',
     url('^admin/login/$', login, {'template_name': 'mumblr/log_in.html'}, 
         name='log-in'),
     url('^admin/logout/$', logout, {'next_page': '/'}, name='log-out'),
+    url('^feeds/(?P<url>.*/$)', 'django.contrib.syndication.views.feed',
+        {'feed_dict': feeds}, name='feeds'),
 )
