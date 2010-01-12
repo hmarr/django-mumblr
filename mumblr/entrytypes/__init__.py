@@ -4,6 +4,7 @@ from django.forms.extras.widgets import SelectDateWidget
 
 from datetime import datetime
 import re
+from uuid import uuid4
 from mongoengine import *
 from mongoengine.django.auth import User
 
@@ -11,9 +12,13 @@ from mongoengine.django.auth import User
 class Comment(EmbeddedDocument):
     """A comment that may be embedded within a post.
     """
+    id = StringField(required=True, default=uuid4)
     author = StringField()
     body = StringField()
     date = DateTimeField(required=True, default=datetime.now)
+
+    def rendered_content(self):
+        return self.body
 
     class CommentForm(forms.Form):
 

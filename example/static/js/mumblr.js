@@ -8,4 +8,10 @@ jQuery.fn.slugify = function(obj) {
 }
 $(function() {
     $('input[name=title]').slugify('input[name=slug]');
+    $('#admin-box').scrollFollow({
+        container: 'pagehead',
+        offset: 0,
+        speed: 200,
+        delay: 100,
+    })
 });

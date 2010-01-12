@@ -5,10 +5,10 @@
 
 {% block content %}
 {% for entry in entries.object_list %}
+    {% if not forloop.first %}
+        <div class="hr-styled"></div>
+    {% endif %}
     <div class="entry">
-        {% if not forloop.first %}
-            <div class="hr-styled"></div>
-        {% endif %}
         {% if user.is_authenticated %}
             <div class="edit-box">
                 <a class="mbl-button" href="{% url edit-entry entry.id %}">Edit</a>&nbsp;<a class="mbl-button mbl-button-primary" href="{% url delete-entry entry.id %}?{% csrf_url_token %}">Delete</a>
@@ -22,7 +22,7 @@
             {% endif %}
             {{ entry.title|safe|typogrify }}</a></h3>
             <div class="post-info">
-            <p><a href="{{ entry.get_absolute_url }}#comments" class="comments">{{ entry.comments|length|default:0|safe }} Comments</a>&nbsp;<span class="date">{{ entry.date|date:"F jS, Y" }}</span></p>
+            <p><a href="{{ entry.get_absolute_url }}#comments" class="comments">{{ entry.comments|length|default:0|safe }} Comment{{ entry.comments|length|default:0|pluralize }}</a>&nbsp;<span class="date">{{ entry.date|date:"F jS, Y" }}</span></p>
             {% if entry.tags %}
                 <ul class="inline-tag-list">
                 {% for tag in entry.tags %}
