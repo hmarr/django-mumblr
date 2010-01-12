@@ -48,7 +48,29 @@ def log_out(request):
     response = HttpResponseRedirect(reverse('log-in'))
     response.delete_cookie('userid')
     return response
+    
 
+def archive(request, entry_type=None):
+    """Display an archive of posts.
+    """
+    entry_types = [e.type for e in entrytypes.EntryType._types.values()]
+    entry_class = entrytypes.EntryType
+    type = "All"
+
+    if entry_type and entry_type in [e.lower() for e in entry_types]:
+        entry_class = entrytypes.EntryType._types[entry_type.lower()]
+        type = entry_class.type
+
+    entries = entry_class.live_entries().order_by('-date')[:10]
+
+    context = {
+        'title': 'Archive',
+        'entry_types': entry_types,
+        'entries': entries,
+        'entry_type': type,
+    }
+    return render_to_response('mumblr/archive.html', context,
+                              context_instance=RequestContext(request))
 
 @login_required
 def admin(request):
