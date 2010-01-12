@@ -23,6 +23,15 @@
                     </div>
                 </div>
 
+                <div class="fold-box">
+                    <span class="fold"></span>
+                    <div class="fold-box-padder">
+                        <h4><a href="{% url recent-entries %}">Recent Entries</a></h4>
+                        <h4><a href="{% url archive %}">Archive</a></h4>
+                        <h4><a href="{% url tag-cloud %}">Tag Cloud</a></h4>
+                    </div>
+                </div>
+
                 {% if user.is_authenticated %}
                 <div class="fold-box" id="admin-box">
                     <span class="fold"></span>

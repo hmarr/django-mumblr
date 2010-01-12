@@ -1,0 +1,43 @@
+{% extends "mumblr/base.html" %}
+
+{% load smart_if %}
+
+{% block content %}
+<h3>Browse By Type</h3>
+<ul class="inline">
+    <li><a class="mbl-button" href="{% url archive %}" title="All Entries">All</a></li>
+{% for type in entry_types %}
+    <li><a class="mbl-button" href="{% url archive type|lower %}" title="New {{ type }} post">{{ type }}</a></li>
+{% endfor %}
+</ul>
+<div class="clear"></div>
+<h3>{{ entry_type }} Entries&nbsp; { {{ entries|length }} }</h3>
+<ul class="lined-list">
+{% if entries %}
+{% for entry in entries %}
+    {% if forloop.first %}
+    <li class="first">
+    {% else %}
+        {% if forloop.last %}
+        <li class="last">
+        {% else %}
+        <li>
+        {% endif %}
+    {% endif %}
+    <span class="title">
+    {% if entry.link_url %}
+        <a href="{{ entry.link_url }}">
+    {% else %}
+        <a href="{{ entry.get_absolute_url }}" title="{{ entry.title|title|safe }}">
+    {% endif %}
+    {{ entry.title|title|truncatewords:8|safe }}</a></span>&nbsp;<span class="date">{{ entry.date|date:"F jS, Y" }}</span>
+    <div class="edit-box">
+    <a href="{{ entry.get_absolute_url }}#comments" title="Comments" class="comments">{{ entry.comments|length|default:0|safe }}</a>
+    </div>
+    </li>
+{% endfor %}
+{% else %}
+    <p> There are no entries.</p>
+{% endif %}
+</ul>
+{% endblock %}
