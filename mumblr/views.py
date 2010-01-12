@@ -154,6 +154,20 @@ def delete_entry(request, entry_id):
         entrytypes.EntryType.objects.with_id(entry_id).delete()
     return HttpResponseRedirect(reverse('recent-entries'))
 
+@login_required
+@csrf_protect('get', 'post')
+def delete_comment(request, comment_id):
+    """Delete a comment from the database.
+    """
+    if comment_id:
+        # Delete matching comment from entry
+        q = entrytypes.EntryType.objects(comments__id=comment_id)
+        entry = q[0]
+        for comment in entry.comments:
+            if comment.id == comment_id:
+                q.update(pull__comments=comment)
+    return HttpResponseRedirect(entry.get_absolute_url()+'#comments')
+
 def recent_entries(request):
     """Show the [n] most recent entries.
     """
@@ -190,7 +204,7 @@ def entry_detail(request, date, slug):
             q = entrytypes.EntryType.objects(id=entry.id)
             q.update(push__comments=comment)
 
-            return HttpResponseRedirect(entry.get_absolute_url())
+            return HttpResponseRedirect(entry.get_absolute_url()+'#comments')
     else:
         form = form_class()
 

@@ -14,11 +14,11 @@
 <h3>All Entries</h3>
 <ul class="lined-list">
 {% for entry in entries %}
-    {% if forloop.last %}
-    <li class="last">
+    {% if forloop.first %}
+    <li class="first">
     {% else %}
-        {% if forloop.first %}
-        <li class="first">
+        {% if forloop.last %}
+        <li class="last">
         {% else %}
         <li>
         {% endif %}

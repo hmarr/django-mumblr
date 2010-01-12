@@ -4,7 +4,7 @@
 
 {% block content %}
 <div class="post-info">
-<p><a href="{{ entry.get_absolute_url }}#comments" class="comments">{{ entry.comments|length|default:0|safe }} Comments</a>&nbsp;<span class="date">{{ entry.date|date:"F jS, Y" }}</span></p>
+<p><a href="{{ entry.get_absolute_url }}#comments" class="comments">{{ entry.comments|length|default:0|safe }} Comment{{ entry.comments|length|default:0|pluralize }}</a>&nbsp;<span class="date">{{ entry.date|date:"F jS, Y" }}</span></p>
 {% if entry.tags %}
     <ul class="inline-tag-list">
     {% for tag in entry.tags %}
@@ -29,11 +29,11 @@ This post will expire in {{ entry.expiry_date|timeuntil:datenow }}
         <strong>{{ comment.author }}</strong> <span class="comment-time">{{ comment.date|timesince:datenow }} ago</span>
         {% if user.is_authenticated %}        
         <div class="edit-box">
-            <a class="mbl-button mbl-button-primary" href="">Delete</a>
+            <a class="mbl-button mbl-button-primary" href="{% url delete-comment comment.id %}?{% csrf_url_token %}">Delete</a>
         </div>
         {% endif %}
         </div>
-        <p>{{ comment.body }}</p>
+        <p>{{ comment.rendered_content|safe }}</p>
         </li>
     {% endfor %}
     </ul>

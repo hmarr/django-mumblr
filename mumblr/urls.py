@@ -1,7 +1,8 @@
 from django.conf.urls.defaults import *
 
 from views import (recent_entries, tagged_entries, delete_entry, add_entry, 
-                   edit_entry, entry_detail, admin, log_in, tag_cloud, log_out)
+                   edit_entry, entry_detail, admin, log_in, tag_cloud, log_out,
+                   delete_comment)
 
 urlpatterns = patterns('',
     url('^$', recent_entries, name='recent-entries'),
@@ -12,6 +13,7 @@ urlpatterns = patterns('',
     url('^admin/add/(\w+)/$', add_entry, name='add-entry'),
     url('^admin/edit/(\w+)/$', edit_entry, name='edit-entry'),
     url('^admin/delete/(\w+)/$', delete_entry, name='delete-entry'),
+    url('^admin/delete-comment/(\w+)/$', delete_comment, name='delete-comment'),
     url('^admin/login/$', log_in, name='log-in'),
     url('^admin/logout/$', log_out, name='log-out'),
 )

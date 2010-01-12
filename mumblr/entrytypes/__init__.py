@@ -7,13 +7,22 @@ import re
 from mongoengine import *
 from mongoengine.django.auth import User
 
+def _unique_id():
+    """Generate a unique random string for use as comment UUID
+    """
+    return str(datetime.now().strftime('%y%j%H%M%S%f'))
+
 
 class Comment(EmbeddedDocument):
     """A comment that may be embedded within a post.
     """
+    id = StringField(required=True, default=_unique_id)
     author = StringField()
     body = StringField()
     date = DateTimeField(required=True, default=datetime.now)
+
+    def rendered_content(self):
+        return self.body
 
     class CommentForm(forms.Form):
 
