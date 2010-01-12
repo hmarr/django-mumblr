@@ -79,7 +79,6 @@ class EntryType(Document):
         super(EntryType, self).save()
 
     class AdminForm(forms.Form):
-
         title = forms.CharField()
         slug = forms.CharField()
         tags = forms.CharField(required=False)
@@ -96,3 +95,5 @@ class EntryType(Document):
         """Register an EntryType subclass.
         """
         cls._types[entry_type.type.lower()] = entry_type
+
+import core
