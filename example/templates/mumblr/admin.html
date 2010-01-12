@@ -11,7 +11,7 @@
 {% endfor %}
 </ul>
 <div class="clear"></div>
-<h3>All Entries</h3>
+<h3>All Entries&nbsp; { {{ entries|length }} }</h3>
 <ul class="lined-list">
 {% for entry in entries %}
     {% if forloop.first %}

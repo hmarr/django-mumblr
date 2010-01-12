@@ -7,11 +7,12 @@
         <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/pygments.css" />
         <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/grey-theme.css" />
         <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.js"></script>
+        <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.scrollFollow.js"></script>
         <script type="text/javascript" src="{{ MEDIA_URL }}js/mumblr.js"></script>
     </head>
     <body>
         <div class="container">
-        <div class="pagehead">
+        <div class="pagehead" id="pagehead">
             <div class="content">
 
             <div class="left-column">
@@ -23,7 +24,7 @@
                 </div>
 
                 {% if user.is_authenticated %}
-                <div class="fold-box">
+                <div class="fold-box" id="admin-box">
                     <span class="fold"></span>
                     <div class="fold-box-padder">
                         <h4>

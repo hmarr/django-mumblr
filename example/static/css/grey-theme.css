@@ -74,7 +74,7 @@ a:hover {
     padding: 3px 5px;
 }
 
-h1, h2, h3, h4, h5, h6, .date, a.tag, blockquote, table tbody tr th, .title {
+h1, h2, h3, h4, h5, h6, a.tag, blockquote, table tbody tr th, .title {
     font-family: "Museo Slab", Georgia, Helvetica, Arial, Verdana, sans-serif;
 }
 
@@ -344,10 +344,10 @@ p, ul, ol, blockquote, pre code {
 
 .fold-box span.fold {
     background: url('../images/tab.png') 0 0 no-repeat;
-    width: 20px;
-    height: 8px;
+    width: 26px;
+    height: 20px;
     position: absolute;
-    top: -8px;
+    top: -20px;
     left: 0;
 }
 
