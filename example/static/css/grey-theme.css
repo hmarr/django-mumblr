@@ -29,7 +29,7 @@ body {
     font-style: normal;
     font-weight: normal;
     src: url('../other/Museo_Slab_500.eot'); /* IE */
-    src: local('Museo Slab'), url('Museo_Slab_500.woff') format('woff'), url('Museo_Slab_500.otf') format('opentype'), url('Museo_Slab_500.svg#MuseoSlab-500') format('svg');
+    src: local('Museo Slab'), url('../other/Museo_Slab_500.woff') format('woff'), url('../other/Museo_Slab_500.otf') format('opentype'), url('../other/Museo_Slab_500.svg#MuseoSlab-500') format('svg');
 }
 
 .amp {
@@ -56,12 +56,12 @@ pre {
 
 a {
     text-decoration: none;
-    color: #B6B7AB;
+    color: #666;
     outline: none;
 }
 
 a:hover {
-    color: #CFD0C6;
+    color: #999;
 }
 
 .unpublished {
@@ -116,7 +116,7 @@ h4 {
 }
 
 .date, .comment-time {
-    color: #ccc;
+    color: #777;
 }
 
 a.comments {
@@ -146,7 +146,7 @@ a.comments:hover {
 }
 
 blockquote {
-    color: #aaa;
+    color: #777;
     font-size: 1.28em; 
     line-height: 24px;
     margin: 1.5em 0 1.5em 40px !important;
@@ -390,7 +390,7 @@ table tbody tr th {
     font-size: 14px;
     vertical-align: top;
     line-height: 28px;
-    color: #ccc;
+    color: #777;
     font-weight: normal;
 }
 

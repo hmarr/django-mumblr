@@ -4,7 +4,10 @@
 {% load typogrify %}
 
 {% block content %}
-{% for entry in entries %}
+{% for entry in entries.object_list %}
+    {% if not forloop.first %}
+        <div class="hr-styled"></div>
+    {% endif %}
     <div class="entry">
         {% if user.is_authenticated %}
             <div class="edit-box">
@@ -17,7 +20,7 @@
             {% else %}
                 <a href="{{ entry.get_absolute_url }}">
             {% endif %}
-            {{ entry.title|title|safe|typogrify }}</a></h3>
+            {{ entry.title|safe|typogrify }}</a></h3>
             <div class="post-info">
             <p><a href="{{ entry.get_absolute_url }}#comments" class="comments">{{ entry.comments|length|default:0|safe }} Comment{{ entry.comments|length|default:0|pluralize }}</a>&nbsp;<span class="date">{{ entry.date|date:"F jS, Y" }}</span></p>
             {% if entry.tags %}
@@ -30,9 +33,21 @@
             <div class="clear"></div>
             </div>
         {{ entry.rendered_content|safe|typogrify }}
-        {% if not forloop.last %}
-            <div class="hr-styled"></div>
-        {% endif %}
     </div>
 {% endfor %}
+{% if entries.has_other_pages %}
+    <div class="hr-styled"></div>
+{% endif %}
+{% if entries.has_previous %}
+    <a href="{% url recent-entries entries.previous_page_number %}" style="float: left;">
+        <h4>&lt;&lt; Newer</h4>
+    </a>
+    <br />
+{% endif %}
+{% if entries.has_next %}
+    <a href="{% url recent-entries entries.next_page_number %}" style="float: right;">
+        <h4>Older &gt;&gt;</h4>
+    </a>
+    <br />
+{% endif %}
 {% endblock %}

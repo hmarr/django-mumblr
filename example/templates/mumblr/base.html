@@ -6,6 +6,8 @@
         <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/reset.css" />
         <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/pygments.css" />
         <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/grey-theme.css" />
+        <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.js"></script>
+        <script type="text/javascript" src="{{ MEDIA_URL }}js/mumblr.js"></script>
     </head>
     <body>
         <div class="container">
@@ -42,7 +44,7 @@
                 {% endif %}
             </div> <!-- /left-column -->
 
-            <h2>{{ title|title|safe }}</h2>
+            <h2>{{ title|safe }}</h2>
             <div class="clear"></div>
 
 
