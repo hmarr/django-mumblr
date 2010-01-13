@@ -1,24 +1,15 @@
 from django import forms
-from django.conf import settings
 
 from mongoengine import *
 
-from mumblr.entrytypes import EntryType
+from mumblr.entrytypes import EntryType, Comment, markup
 
 
-MARKUP_LANGUAGE = getattr(settings, 'MUMBLR_MARKUP_LANGUAGE', None)
-
-def markup(text):
-    """Markup text using the markup language specified in the settings.
+class HtmlComment(Comment):
+    """An HTML-based entry, which will be converted from the markup language
+    specified in the settings.
     """
-    if MARKUP_LANGUAGE == 'markdown':
-        import markdown
-        try:
-            import pygments
-            return markdown.markdown(text, ['codehilite'])
-        except ImportError:
-            return markdown.markdown(text)
-    return text
+    rendered_content = StringField(required=True)
 
 
 class HtmlEntry(EntryType):

@@ -16,6 +16,14 @@ from mongoengine.django.auth import REDIRECT_FIELD_NAME
 
 import entrytypes
 from utils import csrf_protect
+from entrytypes import markup
+
+NO_ENTRIES_MESSAGES = (
+    ('Have <a href="http://icanhazcheezburger.com">some kittens</a> instead.'),
+    ('Have <a href="http://xkcd.com">a comic</a> instead.'),
+    ('How about <a href="http://http://www.youtube.com/watch?v=oHg5SJYRHA0">'
+     'a song</a> instead.'),
+)
 
 
 def log_in(request):
@@ -187,11 +195,9 @@ def delete_comment(request, comment_id):
     """
     if comment_id:
         # Delete matching comment from entry
-        q = entrytypes.EntryType.objects(comments__id=comment_id)
-        entry = q[0]
-        for comment in entry.comments:
-            if comment.id == comment_id:
-                q.update(pull__comments=comment)
+        entry = entrytypes.EntryType.objects(comments__id=comment_id)[0]
+        entry.comments = [c for c in entry.comments if c.id != comment_id]
+        entry.save()
     return HttpResponseRedirect(entry.get_absolute_url()+'#comments')
 
 def recent_entries(request, page_number=1):
@@ -207,6 +213,7 @@ def recent_entries(request, page_number=1):
     context = {
         'title': 'Recent Entries',
         'entries': entries,
+        'no_entries_messages': NO_ENTRIES_MESSAGES,
     }
     return render_to_response('mumblr/list_entries.html', context,
                               context_instance=RequestContext(request))
@@ -219,8 +226,9 @@ def entry_detail(request, date, slug):
     except:
         raise Http404
 
-    entry = entrytypes.EntryType.objects(slug=slug).order_by('-date').first()
-    if not entry:
+    try:
+        entry = entrytypes.EntryType.objects(slug=slug).order_by('-date')[0]
+    except IndexError:
         raise Http404
 
     # Select correct form for entry type
@@ -230,9 +238,10 @@ def entry_detail(request, date, slug):
         form = form_class(request.POST)
         if form.is_valid():
             # Get necessary post data from the form
-            comment = entrytypes.Comment(**form.cleaned_data)
+            comment = entrytypes.core.HtmlComment(**form.cleaned_data)
             # Update entry with comment
             q = entrytypes.EntryType.objects(id=entry.id)
+            comment.rendered_content = markup(comment.body, True)
             q.update(push__comments=comment)
 
             return HttpResponseRedirect(entry.get_absolute_url()+'#comments')
@@ -263,6 +272,7 @@ def tagged_entries(request, tag=None, page_number=1):
     context = {
         'title': 'Entries Tagged "%s"' % tag,
         'entries': entries,
+        'no_entries_messages': NO_ENTRIES_MESSAGES,
     }
     return render_to_response('mumblr/list_entries.html', context,
                               context_instance=RequestContext(request))
