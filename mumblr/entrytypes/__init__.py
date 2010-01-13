@@ -1,4 +1,5 @@
 from django import forms
+from django.conf import settings
 from django.db.models import permalink
 from django.forms.extras.widgets import SelectDateWidget
 
@@ -9,6 +10,24 @@ from mongoengine import *
 from mongoengine.django.auth import User
 
 
+MARKUP_LANGUAGE = getattr(settings, 'MUMBLR_MARKUP_LANGUAGE', None)
+
+def markup(text, small_headings=False):
+    """Markup text using the markup language specified in the settings.
+    """
+    if MARKUP_LANGUAGE == 'markdown':
+        import markdown
+        try:
+            import pygments
+            text = markdown.markdown(text, ['codehilite'], safe_mode="escape")
+        except ImportError:
+            text = markdown.markdown(text, safe_mode="escape")
+    
+    if small_headings:
+        text = re.sub('<(/?h)[1-6]', '<\g<1>5', text)
+    return text
+
+
 class Comment(EmbeddedDocument):
     """A comment that may be embedded within a post.
     """
@@ -16,9 +35,6 @@ class Comment(EmbeddedDocument):
     author = StringField()
     body = StringField()
     date = DateTimeField(required=True, default=datetime.now)
-
-    def rendered_content(self):
-        return self.body
 
     class CommentForm(forms.Form):
 
@@ -76,6 +92,7 @@ class EntryType(Document):
             tag = tag.strip().lower().replace(' ', '-')
             return re.sub('[^a-z0-9_-]', '', tag)
         self.tags = [convert_tag(tag) for tag in self.tags]
+        self.tags = [tag for tag in self.tags if tag.strip()]
         super(EntryType, self).save()
 
     class AdminForm(forms.Form):

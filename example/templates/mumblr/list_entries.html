@@ -4,6 +4,9 @@
 {% load typogrify %}
 
 {% block content %}
+{% if not entries.object_list %}
+    There are no recent entries. {{ no_entries_messages|random|safe }}
+{% endif %}
 {% for entry in entries.object_list %}
     {% if not forloop.first %}
         <div class="hr-styled"></div>
