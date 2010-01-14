@@ -2,7 +2,7 @@
 
 <html>
     <head>
-        <title>{{ title|striptags }} | Mumblr</title>
+        <title>{{ title|striptags }}{% if title %} | {% endif %}Mumblr</title>
         <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/reset.css" />
         <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/pygments.css" />
         <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/grey-theme.css" />
@@ -57,9 +57,10 @@
                 {% endif %}
             </div> <!-- /left-column -->
 
-            <h2>{{ title|safe }}</h2>
-            <div class="clear"></div>
-
+            {% if title %}
+                <h2>{{ title|safe }}</h2>
+                <div class="clear"></div>
+            {% endif %}
 
             {% block content %}{% endblock %}
             </div> <!-- /content-->

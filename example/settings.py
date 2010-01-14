@@ -55,7 +55,6 @@ TEMPLATE_DIRS = (
 
 INSTALLED_APPS = (
     'django.contrib.sessions',
-    'signed',
     'typogrify',
     'mumblr',
 )

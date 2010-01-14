@@ -3,25 +3,8 @@ from django.utils.hashcompat import md5_constructor
 from django.utils.cache import patch_vary_headers
 from django.contrib.auth.models import AnonymousUser
 
-from signed.signed import unsign
 from random import randrange
 from mongoengine.django.auth import get_user
-
-
-class AuthMiddleware(object):
-    """Middleware that tacks a User object on to the request object by fetching
-    the user with the username specified in a signed cookie. The standard
-    AuthMiddleware depends on sessions, which is why this is necessary.
-    """
-    
-    def process_request(self, request):
-        userid = None
-        try:
-            userid = unsign(request.COOKIES['userid'])
-            request.user = get_user(userid)
-        except:
-            request.user = AnonymousUser()
-
 
 if not getattr(settings, 'CSRF_COOKIE_NAME', None):
     settings.CSRF_COOKIE_NAME = 'csrftoken'
