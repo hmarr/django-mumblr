@@ -498,7 +498,7 @@ li .edit-box {
     clear: both;
 }
 
-.content img {
+.content > img, .content .entry > img {
     border: 10px solid #eee;
     margin: 20px 0 20px -40px;
     width: 620px;

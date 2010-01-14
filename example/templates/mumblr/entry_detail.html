@@ -2,6 +2,15 @@
 
 {% load mumblr_csrf %}
 
+{% block extrahead %}
+{{ block.super }}
+<script type="text/javascript">
+var RecaptchaOptions = {
+   theme : 'white'
+};
+</script>
+{% endblock %}
+
 {% block content %}
 <div class="post-info">
 <p><a href="{{ entry.get_absolute_url }}#comments" class="comments">{{ entry.comments|length|default:0|safe }} Comment{{ entry.comments|length|default:0|pluralize }}</a>&nbsp;<span class="date">{{ entry.date|date:"F jS, Y" }}</span></p>

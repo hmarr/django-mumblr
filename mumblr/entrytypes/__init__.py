@@ -2,6 +2,7 @@ from django import forms
 from django.conf import settings
 from django.db.models import permalink
 from django.forms.extras.widgets import SelectDateWidget
+import fields
 
 from datetime import datetime
 import re
@@ -12,7 +13,7 @@ from mongoengine.django.auth import User
 
 MARKUP_LANGUAGE = getattr(settings, 'MUMBLR_MARKUP_LANGUAGE', None)
 
-def markup(text, small_headings=False):
+def markup(text, small_headings=False, no_follow=True):
     """Markup text using the markup language specified in the settings.
     """
     if MARKUP_LANGUAGE == 'markdown':
@@ -25,6 +26,10 @@ def markup(text, small_headings=False):
     
     if small_headings:
         text = re.sub('<(/?h)[1-6]', '<\g<1>5', text)
+
+    if no_follow:
+        text = re.sub('<a (?![^>]*nofollow)', '<a rel="nofollow" ', text)
+
     return text
 
 
@@ -40,6 +45,7 @@ class Comment(EmbeddedDocument):
 
         author = forms.CharField()
         body = forms.CharField(widget=forms.Textarea)
+        recaptcha = fields.ReCaptchaField()
 
 
 class EntryType(Document):
