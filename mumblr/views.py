@@ -198,10 +198,12 @@ def entry_detail(request, date, slug):
     form_class = entrytypes.Comment.CommentForm
 
     if request.method == 'POST':
-        form = form_class(request.POST)
+        form = form_class(request.user, request.POST)
         if form.is_valid():
             # Get necessary post data from the form
             comment = entrytypes.core.HtmlComment(**form.cleaned_data)
+            if request.user.is_authenticated():
+                comment.is_admin = True
             # Update entry with comment
             q = entrytypes.EntryType.objects(id=entry.id)
             comment.rendered_content = markup(comment.body, True)
@@ -209,7 +211,7 @@ def entry_detail(request, date, slug):
 
             return HttpResponseRedirect(entry.get_absolute_url()+'#comments')
     else:
-        form = form_class()
+        form = form_class(request.user)
 
     entry_url = entry.link_url or entry.get_absolute_url()
     context = {

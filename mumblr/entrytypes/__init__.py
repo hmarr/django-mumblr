@@ -40,12 +40,23 @@ class Comment(EmbeddedDocument):
     author = StringField()
     body = StringField()
     date = DateTimeField(required=True, default=datetime.now)
+    is_admin = BooleanField(required=True, default=False)
 
     class CommentForm(forms.Form):
 
         author = forms.CharField()
         body = forms.CharField(widget=forms.Textarea)
-        recaptcha = fields.ReCaptchaField()
+
+        def __init__(self, user, *args, **kwargs):
+            super(Comment.CommentForm, self).__init__(*args, **kwargs)
+            if not user.is_authenticated():
+                # Only show captcha for anonymous users
+                recaptcha = fields.ReCaptchaField(label="Human?")
+                self.fields['recaptcha'] = recaptcha
+            else:
+                # Initialise author field if user logged in
+                author = "%s %s" % (user.first_name, user.last_name)
+                self.fields['author'].initial = author
 
 
 class EntryType(Document):
@@ -66,6 +77,7 @@ class EntryType(Document):
     date = DateTimeField(required=True, default=datetime.now)
     tags = ListField(StringField(max_length=50))
     comments = ListField(EmbeddedDocumentField(Comment))
+    comments_enabled = BooleanField(default=True)
     published = BooleanField(default=True)
     publish_date = DateTimeField(required=False, default=None)
     expiry_date = DateTimeField(required=False, default=None)
@@ -113,6 +125,7 @@ class EntryType(Document):
         expiry_date = forms.DateTimeField(
             widget=SelectDateWidget(required=False),
             required=False)
+        comments_enabled = forms.BooleanField(required=False, label="Comments?")
 
     @classmethod
     def register(cls, entry_type):
