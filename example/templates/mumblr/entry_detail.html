@@ -55,7 +55,7 @@ This post will expire in {{ entry.expiry_date|timeuntil:datenow }}
         </div>
         {% endif %}
         </div>
-        <p>{{ comment.rendered_content|safe }}</p>
+        {{ comment.rendered_content|safe }}
         </li>
     {% endfor %}
     </ul>
