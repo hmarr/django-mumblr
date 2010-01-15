@@ -2,8 +2,8 @@ from django.conf.urls.defaults import *
 from django.contrib.auth.views import login, logout
 
 from views import (recent_entries, tagged_entries, delete_entry, add_entry, 
-                   edit_entry, entry_detail, admin, log_in, tag_cloud, log_out,
-                   delete_comment, archive, RssFeed, AtomFeed)
+                   edit_entry, entry_detail, admin, tag_cloud, archive,
+                   delete_comment, RssFeed, AtomFeed)
 
 feeds = {
     'rss': RssFeed,

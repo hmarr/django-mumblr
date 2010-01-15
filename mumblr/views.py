@@ -10,7 +10,6 @@ from django.contrib.syndication.feeds import Feed
 from django.utils.feedgenerator import Atom1Feed
 from django.core.exceptions import ObjectDoesNotExist
 
-from signed.signed import sign
 from datetime import datetime
 from mongoengine.django.auth import REDIRECT_FIELD_NAME
 
@@ -21,45 +20,9 @@ from entrytypes import markup
 NO_ENTRIES_MESSAGES = (
     ('Have <a href="http://icanhazcheezburger.com">some kittens</a> instead.'),
     ('Have <a href="http://xkcd.com">a comic</a> instead.'),
-    ('How about <a href="http://http://www.youtube.com/watch?v=oHg5SJYRHA0">'
+    ('How about <a href="http://www.youtube.com/watch?v=oHg5SJYRHA0">'
      'a song</a> instead.'),
 )
-
-
-def log_in(request):
-    """Log a user in to the site. Usually, this would be handled by Django
-    authentication, but as we are using MongoDB this must be done manually to
-    avoid the sessions framework.
-    """
-    redirect_to = request.REQUEST.get(REDIRECT_FIELD_NAME, 
-                                      reverse('recent-entries'))
-    if request.method == 'POST':
-        form = AuthenticationForm(data=request.POST)
-        if form.is_valid():
-            user = form.get_user()
-            response = HttpResponseRedirect(redirect_to)
-            # Set user's email as a signed cookie - no need for sessions
-            response.set_cookie('userid', sign(user.id.encode('utf8')))
-            return response
-    else:
-        form = AuthenticationForm()
-    # Present user with log in screen
-    context = {
-        'title': 'Log In',
-        'form': form,
-        REDIRECT_FIELD_NAME: redirect_to,
-    }
-    return render_to_response('mumblr/log_in.html', context, 
-                              context_instance=RequestContext(request))
-
-@csrf_protect('get', 'post')
-def log_out(request):
-    """Log a user out.
-    """
-    response = HttpResponseRedirect(reverse('log-in'))
-    response.delete_cookie('userid')
-    return response
-    
 
 def archive(request, entry_type=None):
     """Display an archive of posts.
@@ -235,10 +198,12 @@ def entry_detail(request, date, slug):
     form_class = entrytypes.Comment.CommentForm
 
     if request.method == 'POST':
-        form = form_class(request.POST)
+        form = form_class(request.user, request.POST)
         if form.is_valid():
             # Get necessary post data from the form
             comment = entrytypes.core.HtmlComment(**form.cleaned_data)
+            if request.user.is_authenticated():
+                comment.is_admin = True
             # Update entry with comment
             q = entrytypes.EntryType.objects(id=entry.id)
             comment.rendered_content = markup(comment.body, True)
@@ -246,7 +211,7 @@ def entry_detail(request, date, slug):
 
             return HttpResponseRedirect(entry.get_absolute_url()+'#comments')
     else:
-        form = form_class()
+        form = form_class(request.user)
 
     entry_url = entry.link_url or entry.get_absolute_url()
     context = {

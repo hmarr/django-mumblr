@@ -3,7 +3,6 @@ from django.utils.hashcompat import md5_constructor
 from django.utils.cache import patch_vary_headers
 from django.contrib.auth.models import AnonymousUser
 
-from signed.signed import unsign
 from random import randrange
 from mongoengine.django.auth import get_user
 

@@ -2,9 +2,29 @@
 
 {% load mumblr_csrf %}
 
+{% block extrahead %}
+{{ block.super }}
+<script type="text/javascript">
+var RecaptchaOptions = {
+   theme : 'white'
+};
+</script>
+{% endblock %}
+
 {% block content %}
 <div class="post-info">
-<p><a href="{{ entry.get_absolute_url }}#comments" class="comments">{{ entry.comments|length|default:0|safe }} Comment{{ entry.comments|length|default:0|pluralize }}</a>&nbsp;<span class="date">{{ entry.date|date:"F jS, Y" }}</span></p>
+{% if user.is_authenticated %}
+    <div class="edit-box">
+        <a class="mbl-button" href="{% url edit-entry entry.id %}">Edit</a>&nbsp;<a class="mbl-button mbl-button-primary" href="{% url delete-entry entry.id %}?{% csrf_url_token %}">Delete</a>
+    </div>
+{% endif %}
+<p>
+{% if entry.comments_enabled %}
+<a href="{{ entry.get_absolute_url }}#comments" class="comments">{{ entry.comments|length|default:0|safe }} Comment{{ entry.comments|length|default:0|pluralize }}</a>
+{% else %}
+<span class="comments">Comments closed</span>
+{% endif %}
+&nbsp;<span class="date">{{ entry.date|date:"F jS, Y" }}</span></p>
 {% if entry.tags %}
     <ul class="inline-tag-list">
     {% for tag in entry.tags %}
@@ -20,12 +40,14 @@
 This post will expire in {{ entry.expiry_date|timeuntil:datenow }}    
 <div class="hr-unstyled"></div>
 {% endif %}
-<h3>Remarks</h3>
+<h3>Discussion</h3>
 <a name="comments"></a>
+{% if entry.comments_enabled %}
 {% if entry.comments %}
     <ul class="comments-list">
     {% for comment in entry.comments %}
-        <li><div class="comment-info">
+        {% if comment.is_admin %}<li class="is_admin">{% else %}<li>{% endif %}
+        <div class="comment-info">
         <strong>{{ comment.author }}</strong> <span class="comment-time">{{ comment.date|timesince:datenow }} ago</span>
         {% if user.is_authenticated %}        
         <div class="edit-box">
@@ -33,7 +55,7 @@ This post will expire in {{ entry.expiry_date|timeuntil:datenow }}
         </div>
         {% endif %}
         </div>
-        <p>{{ comment.rendered_content|safe }}</p>
+        {{ comment.rendered_content|safe }}
         </li>
     {% endfor %}
     </ul>
@@ -42,6 +64,7 @@ There are no comments for this post.
 {% endif %}
 <div class="clear"></div>
 <h3>Leave A Reply</h3>
+<p>You may use <a href="http://daringfireball.net/projects/markdown/basics">Markdown</a> syntax but raw HTML will be escaped and headings normalised.</p>
 <form action="" method="post">
     <table>
         {{ form }}
@@ -51,4 +74,7 @@ There are no comments for this post.
     </table>
     {% csrf_form_token %}
 </form>
+{% else %}
+Comments for this post are closed
+{% endif %}
 {% endblock %}

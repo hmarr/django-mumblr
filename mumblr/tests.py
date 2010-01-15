@@ -4,8 +4,7 @@ from django.conf import settings
 import mongoengine
 from mongoengine.django.auth import User
 
-from mumblr.entrytypes.core import HtmlEntry
-from mumblr.entrytypes import Comment 
+from mumblr.entrytypes.core import HtmlEntry, HtmlComment 
 
 mongoengine.connect('mumblr-unit-tests')
 
@@ -39,7 +38,11 @@ class MumblrTest(TestCase):
         self.html_entry.rendered_content = '<p>some test content</p>'
 
         # Create test comment
-        self.comment = Comment(author='Mr Test', body='test comment')
+        self.comment = HtmlComment(
+            author='Mr Test',
+            body='test comment',
+            rendered_content = '<p>test comment</p>',
+        )
         self.html_entry.comments = [self.comment]
 
         self.html_entry.save()
@@ -62,7 +65,7 @@ class MumblrTest(TestCase):
         """Ensure that comments are properly inserted
         """
         response = self.client.get(self.html_entry.get_absolute_url())
-        self.assertContains(response, self.comment.rendered_content(),
+        self.assertContains(response, self.comment.rendered_content,
                             status_code=200)
 
     def test_tagged_entries(self):
@@ -94,7 +97,8 @@ class MumblrTest(TestCase):
             'slug': 'second-test-entry',
             'tags': 'tests',
             'published': 'true',
-            'content': '<p>test</p>',
+            'content': 'test',
+            'rendered_content': '<p>test</p>',
         }
         # Check CSRF-proof
         response = self.client.post('/admin/add/html/', entry_data)
@@ -118,6 +122,8 @@ class MumblrTest(TestCase):
     def test_add_comment(self):
         """Ensure that comments can be added
         """
+        # Login to prevent Captcha
+        self.login()
         add_url = self.html_entry.get_absolute_url()+'#comments'
         response = self.client.get(add_url)
         csrf_token = response.context['csrf_token']
@@ -125,6 +131,7 @@ class MumblrTest(TestCase):
         comment_data = {
             'author': 'Mr Test 2',
             'body': 'another test comment',
+            'rendered_content': '<p>another test comment</p>',
         }
 
         # Check invalid form fails
@@ -139,7 +146,10 @@ class MumblrTest(TestCase):
         self.assertRedirects(response, add_url, target_status_code=200)
 
         response = self.client.get(add_url)
-        self.assertContains(response, comment_data['body'])
+        self.assertContains(response, comment_data['rendered_content'])
+
+        # Because we are logged in, lets check the proper class was set
+        self.assertContains(response, "is_admin")
 
     def test_edit_entry(self):
         """Ensure that entries may be edited.

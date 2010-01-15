@@ -36,7 +36,11 @@
         {% if entry.publish_date >= datenow and entry.publish_date %}<span class="unpublished">Future Publication</span>&nbsp;{% endif %}
         {% if entry.expiry_date < datenow and entry.expiry_date %}<span class="unpublished">Expired</span>&nbsp;{% endif %}
     {% endif %}
+    {% if entry.comments_enabled %}
     <a href="{{ entry.get_absolute_url }}#comments" title="Comments" class="comments">{{ entry.comments|length|default:0|safe }}</a>
+    {% else %}
+    <span class="comments">Off</span>
+    {% endif %}
     <a class="mbl-button" href="{% url edit-entry entry.id %}" title="Edit post">Edit</a>&nbsp;<a class="mbl-button mbl-button-primary" href="{% url delete-entry entry.id %}?{% csrf_url_token %}" title="Delete post">Delete</a></div>
     </li>
 {% endfor %}
