@@ -83,6 +83,10 @@ class EntryType(Document):
     expiry_date = DateTimeField(required=False, default=None)
     link_url = StringField()
 
+    meta = {
+        'indexes': ['slug', '-date', 'tags'],
+    }
+
     _types = {}
 
     @queryset_manager
