@@ -12,6 +12,7 @@ from django.core.exceptions import ObjectDoesNotExist
 
 from datetime import datetime
 from mongoengine.django.auth import REDIRECT_FIELD_NAME
+from pymongo.son import SON
 
 import entrytypes
 from utils import csrf_protect
@@ -247,7 +248,10 @@ def tag_cloud(request):
     """A page containing a 'tag-cloud' of the tags present on entries.
     """
     entries = entrytypes.EntryType.live_entries
+    
     freqs = entries.item_frequencies('tags', normalize=True)
+    freqs = sorted(freqs.iteritems(), key=lambda (k,v):(v,k))
+    freqs.reverse()
 
     context = {
         'title': 'Tag Cloud',
@@ -262,7 +266,7 @@ class RssFeed(Feed):
     description = ""
 
     def items(self):
-        return entrytypes.EntryType.live_entries().order_by('-date')[:30]
+        return entrytypes.EntryType.live_entries.order_by('-date')[:30]
 
     def item_pubdate(self, item):
         return item.date
