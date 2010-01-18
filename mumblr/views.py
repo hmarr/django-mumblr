@@ -159,9 +159,10 @@ def delete_comment(request, comment_id):
     """
     if comment_id:
         # Delete matching comment from entry
-        entry = entrytypes.EntryType.objects(comments__id=comment_id)[0]
-        entry.comments = [c for c in entry.comments if c.id != comment_id]
-        entry.save()
+        entry = entrytypes.EntryType.objects(comments__id=comment_id).first()
+        if entry:
+            entry.comments = [c for c in entry.comments if c.id != comment_id]
+            entry.save()
     return HttpResponseRedirect(entry.get_absolute_url()+'#comments')
 
 def recent_entries(request, page_number=1):
