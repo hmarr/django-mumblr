@@ -261,7 +261,7 @@ def tag_cloud(request):
                               context_instance=RequestContext(request))
 
 class RssFeed(Feed):
-    title = "Mumblr Recent Entries"
+    title = getattr(settings, 'SITE_INFO_TITLE', 'Mumblr Recent Entries')
     link = "/"
     description = ""
 
