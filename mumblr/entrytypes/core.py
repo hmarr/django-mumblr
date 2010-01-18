@@ -12,20 +12,20 @@ class HtmlComment(Comment):
     rendered_content = StringField(required=True)
 
 
-class HtmlEntry(EntryType):
+class TextEntry(EntryType):
     """An HTML-based entry, which will be converted from the markup language
     specified in the settings.
     """
     content = StringField(required=True)
     rendered_content = StringField(required=True)
 
-    type = 'HTML'
+    type = 'Text'
 
     def save(self):
         """Convert any markup to HTML before saving.
         """
         self.rendered_content = markup(self.content)
-        super(HtmlEntry, self).save()
+        super(TextEntry, self).save()
 
     class AdminForm(EntryType.AdminForm):
         content = forms.CharField(widget=forms.Textarea)
@@ -72,6 +72,6 @@ class ImageEntry(EntryType):
         description = forms.CharField(widget=forms.Textarea, required=False)
 
 
-EntryType.register(HtmlEntry)
+EntryType.register(TextEntry)
 EntryType.register(LinkEntry)
 EntryType.register(ImageEntry)
