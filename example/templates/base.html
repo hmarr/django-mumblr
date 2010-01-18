@@ -4,15 +4,15 @@
 
 <html>
     <head>
-        <title>{{ title|striptags }}{% if title %} | {% endif %}Mumblr</title>
-        <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/reset.css" />
-        <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/pygments.css" />
-        <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/grey-theme.css" />
+        <title>{{ title|striptags }}{% if title %} | {% endif %}{{ SITE_INFO_TITLE }}</title>
+        <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}mumblr/css/reset.css" />
+        <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}mumblr/css/pygments.css" />
+        <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}mumblr/css/grey-theme.css" />
         <link rel="alternate" type="application/rss+xml" title="Mumblr (RSS 2.0)" href="/feeds/rss/" />
         <link rel="alternate" type="application/atom+xml" title="Mumblr (Atom 1.0)" href="/feeds/atom/" />
-        <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.js"></script>
-        <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.scrollfollow.js"></script>
-        <script type="text/javascript" src="{{ MEDIA_URL }}js/mumblr.js"></script>
+        <script type="text/javascript" src="{{ MEDIA_URL }}mumblr/js/jquery.js"></script>
+        <script type="text/javascript" src="{{ MEDIA_URL }}mumblr/js/jquery.scrollfollow.js"></script>
+        <script type="text/javascript" src="{{ MEDIA_URL }}mumblr/js/mumblr.js"></script>
         {% block extrahead %}{% endblock %}
     </head>
     <body>
@@ -46,11 +46,8 @@
                     <span class="fold"></span>
                     <div class="fold-box-padder">
                         <h4>
-                        {% if user.first_name %}
-                            {{ user.first_name }} 
-                            {% if user.last_name %}
-                                {{ user.last_name }} 
-                            {% endif %}
+                        {% if user.get_full_name %}
+                            {{ user.get_full_name }} 
                         {% else %}
                             {{ user.email }}
                         {% endif %}

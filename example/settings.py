@@ -8,22 +8,13 @@ ADMINS = (
 MANAGERS = ADMINS
 
 import os
-PROJECT_PATH = os.path.abspath(os.path.dirname(__file__))
-
-import mongoengine
-mongoengine.connect('mumblr-example')
+from local_settings import *
 
 TIME_ZONE = 'Europe/London'
 LANGUAGE_CODE = 'en-gb'
 USE_I18N = False
 
-MEDIA_ROOT = os.path.join(PROJECT_PATH, 'static')
 MEDIA_URL = '/static/'
-
-SECRET_KEY = '$geoon8_ymg-k)!9wl3wloq4&30w$rhc1*zv%h6m_&nza(4)nk'
-
-RECAPTCHA_PUBLIC_KEY = "6LfFgQoAAAAAABQTj4YjuPbccgKtZStoiWtr7E5k"
-RECAPTCHA_PRIVATE_KEY = "6LfFgQoAAAAAAM-0SAUTe7WxZ-thnWFfSpoc7sfJ"
 
 SITE_INFO_TITLE = ""
 SITE_INFO_DESC = ""
@@ -62,7 +53,6 @@ TEMPLATE_DIRS = (
 
 INSTALLED_APPS = (
     'django.contrib.sessions',
-    'typogrify',
     'mumblr',
 )
 
