@@ -329,7 +329,15 @@ p, ul, ol, blockquote, pre code {
     position: absolute;
     left: 22px;
     top: 50px;
-    max-width: 220px;
+    max-width: 240px;
+}
+
+h4.author {
+    color: #777 !important;
+}
+
+.left-column a:hover {
+    color: #777;
 }
 
 .fold-box {
@@ -343,7 +351,7 @@ p, ul, ol, blockquote, pre code {
 
 .fold-box .fold-box-padder {
     padding: 10px 40px 10px 40px;
-    max-width: 180px;
+    max-width: 200px;
 }
 
 .fold-box a, .fold-box h1, .fold-box h2, .fold-box h3, .fold-box h4 { color: #fff; }
@@ -372,7 +380,7 @@ p, ul, ol, blockquote, pre code {
     padding: 50px 62px 1px;
     position: relative;
     width: 920px;
-    min-height: 400px;
+    min-height: 550px;
 }
 
 /* Ugly IE fix */
@@ -461,6 +469,13 @@ a.tag:hover span {
     background: url('../images/separator.png') center 26px no-repeat;
 }
 
+.hr-styled-inverted {
+    clear: both;
+    height: 20px;
+    margin: 0;
+    background: url('../images/separator-inverted.png') center 6px no-repeat;
+}
+
 .clear {
     clear: both;
     height: 20px;
@@ -503,6 +518,14 @@ li .edit-box {
     color: #fff;
     margin-top: 20px;
     clear: both;
+}
+
+.footer .login {
+    float: left;
+}
+
+.footer .content {
+    color: #777;
 }
 
 .content > img, .content .entry > img {

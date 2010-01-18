@@ -1,5 +1,5 @@
 DEBUG = True
-TEMPLATE_DEBUG = DEBUG
+TEMPLATE_DEBUG = True
 
 ADMINS = (
     ('Harry Marr', 'harry.marr@gmail.com'),
@@ -25,6 +25,9 @@ SECRET_KEY = '$geoon8_ymg-k)!9wl3wloq4&30w$rhc1*zv%h6m_&nza(4)nk'
 RECAPTCHA_PUBLIC_KEY = "6LfFgQoAAAAAABQTj4YjuPbccgKtZStoiWtr7E5k"
 RECAPTCHA_PRIVATE_KEY = "6LfFgQoAAAAAAM-0SAUTe7WxZ-thnWFfSpoc7sfJ"
 
+SITE_INFO_TITLE = ""
+SITE_INFO_DESC = ""
+
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.load_template_source',
@@ -35,6 +38,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.media',
     'mumblr.context_processors.auth',
     'mumblr.context_processors.csrf',
+    'mumblr.context_processors.site_info',
 )
 
 MIDDLEWARE_CLASSES = (

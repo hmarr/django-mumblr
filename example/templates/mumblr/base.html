@@ -1,5 +1,7 @@
 {% load mumblr_csrf %}
 
+{% load typogrify %}
+
 <html>
     <head>
         <title>{{ title|striptags }}{% if title %} | {% endif %}Mumblr</title>
@@ -22,9 +24,11 @@
                 <div class="fold-box">
                     <span class="fold"></span>
                     <div class="fold-box-padder">
-                        <h1><a href="{% url recent-entries %}">Mumblr</a></h1>
+                        <h1><a href="{% url recent-entries %}">{{ SITE_INFO_TITLE }}</a></h1>
+                        <h4 class="author">{{ SITE_INFO_DESC }}</h4></p>
                     </div>
                 </div>
+
 
                 <div class="fold-box">
                     <span class="fold"></span>
@@ -32,6 +36,7 @@
                         <h4><a href="{% url recent-entries %}">Recent Entries</a></h4>
                         <h4><a href="{% url archive %}">Archive</a></h4>
                         <h4><a href="{% url tag-cloud %}">Tag Cloud</a></h4>
+                        <div class="hr-styled-inverted"></div>
                         <h4><a href="/feeds/rss">RSS</a>/<a href="/feeds/atom">Atom</a></h4>
                     </div>
                 </div>
@@ -59,7 +64,7 @@
             </div> <!-- /left-column -->
 
             {% if title %}
-                <h2>{{ title|safe }}</h2>
+                <h2>{{ title|safe|typogrify }}</h2>
                 <div class="clear"></div>
             {% endif %}
 
@@ -69,11 +74,14 @@
         </div> <!-- /container -->
         <div class="footer">
             <div class="container">
-            {% if user.is_authenticated %}
-                <a class="mbl-button mbl-button-primary" href="{% url log-out %}?{% csrf_url_token %}">Log out</a>
-            {% else %}
+            {% if not user.is_authenticated %}
+                <div class="login">
                 <p><a class="mbl-button mbl-button-primary" href="{% url log-in %}">Log in</a></p>
+                </div>
             {% endif %}
+            <div class="content">
+            <p>Mumblr is a basic <a href="http://www.djangoproject.com/">Django</a> tumblelog application that uses <a href="http://www.mongodb.org">MongoDB</a> with <a href="http://github.com/hmarr/mongoengine">MongoEngine</a>. Fork it on <a href="http://github.com/hmarr/django-mumblr">Github</a>. Designed and developed by <a href="http://hmarr.com">Harry Marr</a> and <a href="http://stevechallis.com">Steve Challis</a>.</p>
+            </div>
             </div>
         </div>
     </body>

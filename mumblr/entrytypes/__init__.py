@@ -114,7 +114,6 @@ class EntryType(Document):
         super(EntryType, self).save()
 
     class AdminForm(forms.Form):
-
         title = forms.CharField()
         slug = forms.CharField()
         tags = forms.CharField(required=False)
@@ -125,7 +124,7 @@ class EntryType(Document):
         expiry_date = forms.DateTimeField(
             widget=SelectDateWidget(required=False),
             required=False)
-        comments_enabled = forms.BooleanField(required=False, label="Comments?")
+        comments_enabled = forms.BooleanField(required=False, label="Comments")
 
     @classmethod
     def register(cls, entry_type):
