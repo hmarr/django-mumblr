@@ -3,7 +3,7 @@ jQuery.fn.slugify = function(obj) {
     jQuery(this).keyup(function() {
         var obj = jQuery(this).data('obj');
         var slug = jQuery(this).val().replace(/\s+/g,'-').replace(/[^a-zA-Z0-9\-]/g,'').toLowerCase();
-        obj.val(slug);
+        obj.val(slug.replace(/-+/, '-'));
     });
 }
 $(function() {

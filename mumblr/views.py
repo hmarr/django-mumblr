@@ -35,7 +35,7 @@ def archive(request, entry_type=None):
         entry_class = entrytypes.EntryType._types[entry_type.lower()]
         type = entry_class.type
 
-    entries = entry_class.live_entries().order_by('-date')[:10]
+    entries = entry_class.live_entries()[:10]
 
     context = {
         'title': 'Archive',
@@ -51,7 +51,7 @@ def admin(request):
     """Display the main admin page.
     """
     entry_types = [e.type for e in entrytypes.EntryType._types.values()]
-    entries = entrytypes.EntryType.objects.order_by('-date')[:10]
+    entries = entrytypes.EntryType.objects[:10]
 
     context = {
         'title': 'Mumblr Admin',
@@ -130,7 +130,7 @@ def add_entry(request, type):
             entry.save()
             return HttpResponseRedirect(reverse('recent-entries'))
     else:
-        form = form_class()
+        form = form_class(initial={'publish_date': datetime.now()})
 
     context = {
         'title': 'Add %s Entry' % type,
@@ -166,7 +166,7 @@ def recent_entries(request, page_number=1):
     """Show the [n] most recent entries.
     """
     num = getattr(settings, 'MUMBLR_NUM_ENTRIES_PER_PAGE', 10)
-    entry_list = entrytypes.EntryType.live_entries().order_by('-date')
+    entry_list = entrytypes.EntryType.live_entries()
     paginator = Paginator(entry_list, num)
     try:
         entries = paginator.page(page_number)
@@ -189,7 +189,7 @@ def entry_detail(request, date, slug):
         raise Http404
 
     try:
-        entry = entrytypes.EntryType.objects(slug=slug).order_by('-date')[0]
+        entry = entrytypes.EntryType.objects(publish_date=date, slug=slug)[0]
     except IndexError:
         raise Http404
 
@@ -227,7 +227,7 @@ def tagged_entries(request, tag=None, page_number=1):
     """
     tag = tag.strip().lower()
     num = getattr(settings, 'MUMBLR_NUM_ENTRIES_PER_PAGE', 10)
-    entry_list = entrytypes.EntryType.live_entries(tags=tag).order_by('-date')
+    entry_list = entrytypes.EntryType.live_entries(tags=tag)
     paginator = Paginator(entry_list, num)
     try:
         entries = paginator.page(page_number)
@@ -263,10 +263,10 @@ class RssFeed(Feed):
     description = ""
 
     def items(self):
-        return entrytypes.EntryType.live_entries.order_by('-date')[:30]
+        return entrytypes.EntryType.live_entries[:30]
 
     def item_pubdate(self, item):
-        return item.date
+        return item.publish_date
 
 class AtomFeed(RssFeed):
     feed_type = Atom1Feed

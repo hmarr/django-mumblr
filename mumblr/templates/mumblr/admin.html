@@ -28,7 +28,7 @@
     {% else %}
         <a href="{{ entry.get_absolute_url }}" title="{{ entry.title|safe }}">
     {% endif %}
-    {{ entry.title|truncatewords:7|safe }}</a></span>&nbsp;<span class="date">{{ entry.date|date:"F jS, Y" }}</span>
+    {{ entry.title|truncatewords:7|safe }}</a></span>&nbsp;<span class="date">{{ entry.publish_date|date:"F jS, Y" }}</span>
     <div class="edit-box">
     {% if not entry.published %}<span class="unpublished">Unpublished</span>&nbsp;
     {% else %}
@@ -40,7 +40,7 @@
     {% else %}
     <span class="comments">Off</span>
     {% endif %}
-    <form action="{% url delete-entry %}">
+    <form action="{% url delete-entry %}" method="post">
         <input type="hidden" value="{{ entry.id }}" name="entry_id" />
         <input type="submit" value="Delete" class="mbl-button mbl-button-primary" />
     </form>

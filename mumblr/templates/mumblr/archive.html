@@ -30,7 +30,7 @@
     {% else %}
         <a href="{{ entry.get_absolute_url }}" title="{{ entry.title|safe }}">
     {% endif %}
-    {{ entry.title|truncatewords:8|safe }}</a></span>&nbsp;<span class="date">{{ entry.date|date:"F jS, Y" }}</span>
+    {{ entry.title|truncatewords:8|safe }}</a></span>&nbsp;<span class="date">{{ entry.publish_date|date:"F jS, Y" }}</span>
     <div class="edit-box">
     <a href="{{ entry.get_absolute_url }}#comments" title="Comments" class="comments">{{ entry.comments|length|default:0|safe }}</a>
     </div>
