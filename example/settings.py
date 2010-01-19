@@ -28,7 +28,6 @@ TEMPLATE_LOADERS = (
 TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.media',
     'mumblr.context_processors.auth',
-    'mumblr.context_processors.csrf',
     'mumblr.context_processors.site_info',
 )
 
@@ -36,7 +35,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'mumblr.middleware.CsrfMiddleware',
+    'django.contrib.csrf.middleware.CsrfMiddleware',
 )
 
 AUTHENTICATION_BACKENDS = (

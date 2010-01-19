@@ -1,7 +1,5 @@
 {% extends "base.html" %}
 
-{% load mumblr_csrf %}
-
 {% block extrahead %}
 {{ block.super }}
 <script type="text/javascript">
@@ -15,7 +13,11 @@ var RecaptchaOptions = {
 <div class="post-info">
 {% if user.is_authenticated %}
     <div class="edit-box">
-        <a class="mbl-button" href="{% url edit-entry entry.id %}">Edit</a>&nbsp;<a class="mbl-button mbl-button-primary" href="{% url delete-entry entry.id %}?{% csrf_url_token %}">Delete</a>
+        <a class="mbl-button" href="{% url edit-entry entry.id %}">Edit</a>&nbsp;
+        <form action="{% url delete-entry %}">
+            <input type="hidden" value="{{ entry.id }}" name="entry_id" />
+            <input type="submit" value="Delete" class="mbl-button mbl-button-primary" />
+        </form>
     </div>
 {% endif %}
 <p>
@@ -51,7 +53,10 @@ This post will expire in {{ entry.expiry_date|timeuntil:datenow }}
         <strong>{{ comment.author }}</strong> <span class="comment-time">{{ comment.date|timesince:datenow }} ago</span>
         {% if user.is_authenticated %}        
         <div class="edit-box">
-            <a class="mbl-button mbl-button-primary" href="{% url delete-comment comment.id %}?{% csrf_url_token %}">Delete</a>
+            <form action="{% url delete-comment %}">
+                <input type="hidden" value="{{ comment.id }}" name="entry_id" />
+                <input type="submit" value="Delete" class="mbl-button mbl-button-primary" />
+            </form>
         </div>
         {% endif %}
         </div>

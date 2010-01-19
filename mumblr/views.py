@@ -15,7 +15,6 @@ from mongoengine.django.auth import REDIRECT_FIELD_NAME
 from pymongo.son import SON
 
 import entrytypes
-from utils import csrf_protect
 from entrytypes import markup
 
 NO_ENTRIES_MESSAGES = (
@@ -64,7 +63,6 @@ def admin(request):
                               context_instance=RequestContext(request))
 
 @login_required
-@csrf_protect('post')
 def edit_entry(request, entry_id):
     """Edit an existing entry.
     """
@@ -105,7 +103,6 @@ def edit_entry(request, entry_id):
                               context_instance=RequestContext(request))
 
 @login_required
-@csrf_protect('post')
 def add_entry(request, type):
     """Display the 'Add an entry' form when GET is used, and add an entry to
     the database when POST is used.
@@ -144,20 +141,20 @@ def add_entry(request, type):
                               context_instance=RequestContext(request))
 
 @login_required
-@csrf_protect('get', 'post')
-def delete_entry(request, entry_id):
+def delete_entry(request):
     """Delete an entry from the database.
     """
-    if entry_id:
+    entry_id = request.POST.get('entry_id', None)
+    if request.method == 'POST' and entry_id:
         entrytypes.EntryType.objects.with_id(entry_id).delete()
     return HttpResponseRedirect(reverse('recent-entries'))
 
 @login_required
-@csrf_protect('get', 'post')
 def delete_comment(request, comment_id):
     """Delete a comment from the database.
     """
-    if comment_id:
+    comment_id = request.POST.get('comment_id', None)
+    if request.method == 'POST' and comment_id:
         # Delete matching comment from entry
         entry = entrytypes.EntryType.objects(comments__id=comment_id).first()
         if entry:

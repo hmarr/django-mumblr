@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 
-{% load mumblr_csrf %}
 {% load smart_if %}
 
 {% block content %}
@@ -41,7 +40,10 @@
     {% else %}
     <span class="comments">Off</span>
     {% endif %}
-    <a class="mbl-button" href="{% url edit-entry entry.id %}" title="Edit post">Edit</a>&nbsp;<a class="mbl-button mbl-button-primary" href="{% url delete-entry entry.id %}?{% csrf_url_token %}" title="Delete post">Delete</a></div>
+    <form action="{% url delete-entry %}">
+        <input type="hidden" value="{{ entry.id }}" name="entry_id" />
+        <input type="submit" value="Delete" class="mbl-button mbl-button-primary" />
+    </form>
     </li>
 {% endfor %}
 </ul>
