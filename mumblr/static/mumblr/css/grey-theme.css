@@ -33,7 +33,7 @@ body {
 }
 
 .amp {
-    font-family: Baskerville, "Hoefler Text", "Museo Slab" "Goudy Old Style","Palatino","Book Antiqua",serif;
+    font-family: Baskerville, "Hoefler Text", "Museo Slab", "Goudy Old Style","Palatino","Book Antiqua",serif;
     font-style: italic;
 }
 
@@ -248,6 +248,11 @@ form table {
     position: relative;
 }
 
+form {
+    display: inline;
+    white-space: nowrap;
+}
+
 select {
     font-size: 14px;
 }
@@ -287,7 +292,7 @@ a.mbl-button, input[type=submit], input[type=button] {
     text-decoration: none;
     font-weight: bold;
     font-size: 12px;
-    padding: 3px 10px 3px 10px;
+    padding: 3px 9px;
     border-radius: 3px;
     -moz-border-radius: 3px;
     -webkit-border-radius: 3px;
@@ -298,6 +303,10 @@ a.mbl-button, input[type=submit], input[type=button] {
     white-space: nowrap;
     cursor: pointer;
     line-height: 16px;
+}
+
+input[type=submit], input[type=button] {
+    padding: 2px 10px;
 }
 
 a.mbl-button:hover, input[type=button]:hover {
@@ -330,6 +339,10 @@ p, ul, ol, blockquote, pre code {
     left: 22px;
     top: 50px;
     max-width: 240px;
+}
+
+* html .left-column {
+    width: 240px;
 }
 
 h4.author {
