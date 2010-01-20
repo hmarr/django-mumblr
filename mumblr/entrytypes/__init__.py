@@ -32,6 +32,10 @@ def markup(text, small_headings=False, no_follow=True):
 
     return text
 
+def today():
+    now = datetime.now()
+    return datetime(now.year, now.month, now.day)
+
 
 class Comment(EmbeddedDocument):
     """A comment that may be embedded within a post.
@@ -79,7 +83,7 @@ class EntryType(Document):
     comments = ListField(EmbeddedDocumentField(Comment))
     comments_enabled = BooleanField(default=True)
     published = BooleanField(default=True)
-    publish_date = DateTimeField(required=True, default=datetime.now)
+    publish_date = DateTimeField(required=True, default=today)
     expiry_date = DateTimeField(required=False, default=None)
     link_url = StringField()
 

@@ -3,8 +3,10 @@ from django.conf import settings
 
 import mongoengine
 from mongoengine.django.auth import User
+import re
 
-from mumblr.entrytypes.core import HtmlEntry, HtmlComment 
+from mumblr.entrytypes import today
+from mumblr.entrytypes.core import TextEntry, HtmlComment 
 
 mongoengine.connect('mumblr-unit-tests')
 
@@ -20,7 +22,10 @@ class MumblrTest(TestCase):
         pass
 
     def login(self):
-        return self.client.post('/admin/login/', self.user_data)
+        self.client.get('/admin/login/')
+        data = self.user_data.copy()
+        data['csrfmiddlewaretoken'] = self.get_csrf_token()
+        return self.client.post('/admin/login/', data)
 
     def setUp(self):
         # Create a test user
@@ -31,11 +36,11 @@ class MumblrTest(TestCase):
         self.user = User.create_user(*self.user_data.values())
 
         # Create a test entry
-        self.html_entry = HtmlEntry(title='Test-Entry', slug='test-entry')
-        self.html_entry.tags = ['tests']
-        self.html_entry.published = True
-        self.html_entry.content = 'some-test-content'
-        self.html_entry.rendered_content = '<p>some test content</p>'
+        self.text_entry = TextEntry(title='Test-Entry', slug='test-entry')
+        self.text_entry.tags = ['tests']
+        self.text_entry.published = True
+        self.text_entry.content = 'some-test-content'
+        self.text_entry.rendered_content = '<p>some test content</p>'
 
         # Create test comment
         self.comment = HtmlComment(
@@ -43,40 +48,40 @@ class MumblrTest(TestCase):
             body='test comment',
             rendered_content = '<p>test comment</p>',
         )
-        self.html_entry.comments = [self.comment]
+        self.text_entry.comments = [self.comment]
 
-        self.html_entry.save()
+        self.text_entry.save()
+
+    def get_csrf_token(self):
+        # Scrape CSRF token
+        response = self.client.get('/admin/login/')
+        csrf_regex = r'csrfmiddlewaretoken\'\s+value=\'(\w+)\''
+        csrf_regex = r'value=\'(\w+)\''
+        return re.search(csrf_regex, response.content).groups()[0]
 
     def test_recent_entries(self):
         """Ensure that the recent entries page works properly.
         """
         response = self.client.get('/')
-        self.assertContains(response, self.html_entry.rendered_content, 
+        self.assertContains(response, self.text_entry.rendered_content, 
                             status_code=200)
 
     def test_entry_detail(self):
         """Ensure that the recent entries page works properly.
         """
-        response = self.client.get(self.html_entry.get_absolute_url())
-        self.assertContains(response, self.html_entry.rendered_content, 
-                            status_code=200)
-
-    def test_comment(self):
-        """Ensure that comments are properly inserted
-        """
-        response = self.client.get(self.html_entry.get_absolute_url())
-        self.assertContains(response, self.comment.rendered_content,
+        response = self.client.get(self.text_entry.get_absolute_url())
+        self.assertContains(response, self.text_entry.rendered_content, 
                             status_code=200)
 
     def test_tagged_entries(self):
         """Ensure that the 'tagged entries' page works properly.
         """
         response = self.client.get('/tag/tests/')
-        self.assertContains(response, self.html_entry.rendered_content, 
+        self.assertContains(response, self.text_entry.rendered_content, 
                             status_code=200)
 
         response = self.client.get('/tag/programming/')
-        self.assertNotContains(response, self.html_entry.rendered_content, 
+        self.assertNotContains(response, self.text_entry.rendered_content, 
                                status_code=200)
 
     def test_tag_cloud(self):
@@ -89,8 +94,7 @@ class MumblrTest(TestCase):
         """Ensure that entries may be added.
         """
         self.login()
-        response = self.client.get('/admin/add/html/')
-        csrf_token = response.context['csrf_token']
+        response = self.client.get('/admin/add/text/')
 
         entry_data = {
             'title': 'Second test entry',
@@ -98,22 +102,19 @@ class MumblrTest(TestCase):
             'tags': 'tests',
             'published': 'true',
             'content': 'test',
+            'publish_date': today(),
             'rendered_content': '<p>test</p>',
+            'csrfmiddlewaretoken': self.get_csrf_token(),
         }
-        # Check CSRF-proof
-        response = self.client.post('/admin/add/html/', entry_data)
-        self.assertEqual(response.status_code, 403)
-
         # Check invalid form fails
-        response = self.client.post('/admin/add/html/', {
-            settings.CSRF_COOKIE_NAME: csrf_token,
+        response = self.client.post('/admin/add/text/', {
+            'csrfmiddlewaretoken': self.get_csrf_token(),
             'content': 'test',
         })
-        self.assertTemplateUsed(response, 'mumblr/add_entry.html')
+        self.assertTemplateUsed(response, 'mumblr/admin/add_entry.html')
 
         # Check adding an entry does work
-        entry_data[settings.CSRF_COOKIE_NAME] = csrf_token
-        response = self.client.post('/admin/add/html/', entry_data)
+        response = self.client.post('/admin/add/text/', entry_data)
         self.assertRedirects(response, '/', target_status_code=200)
 
         response = self.client.get('/')
@@ -124,60 +125,50 @@ class MumblrTest(TestCase):
         """
         # Login to prevent Captcha
         self.login()
-        add_url = self.html_entry.get_absolute_url()+'#comments'
-        response = self.client.get(add_url)
-        csrf_token = response.context['csrf_token']
+        add_url = self.text_entry.get_absolute_url()+'#comments'
 
         comment_data = {
             'author': 'Mr Test 2',
             'body': 'another test comment',
             'rendered_content': '<p>another test comment</p>',
+            'csrfmiddlewaretoken': self.get_csrf_token(),
         }
 
         # Check invalid form fails
         response = self.client.post(add_url, {
-            settings.CSRF_COOKIE_NAME: csrf_token,
             'body': 'test',
+            'csrfmiddlewaretoken': self.get_csrf_token(),
         })
 
         # Check adding comment works
-        comment_data[settings.CSRF_COOKIE_NAME] = csrf_token
         response = self.client.post(add_url, comment_data)
         self.assertRedirects(response, add_url, target_status_code=200)
 
         response = self.client.get(add_url)
         self.assertContains(response, comment_data['rendered_content'])
 
-        # Because we are logged in, lets check the proper class was set
-        self.assertContains(response, "is_admin")
-
     def test_edit_entry(self):
         """Ensure that entries may be edited.
         """
         self.login()
-        edit_url = '/admin/edit/%s/' % self.html_entry.id
-        response = self.client.get(edit_url)
-        csrf_token = response.context['csrf_token']
+        edit_url = '/admin/edit/%s/' % self.text_entry.id
 
         entry_data = {
-            'title': self.html_entry.title,
-            'slug': self.html_entry.slug,
+            'title': self.text_entry.title,
+            'slug': self.text_entry.slug,
             'published': 'true',
+            'publish_date': today(),
             'content': 'modified-test-content',
+            'csrfmiddlewaretoken': self.get_csrf_token(),
         }
-        # Check CSRF-proof
-        response = self.client.post(edit_url, entry_data)
-        self.assertEqual(response.status_code, 403)
-
         # Check invalid form fails
         response = self.client.post(edit_url, {
-            settings.CSRF_COOKIE_NAME: csrf_token,
             'content': 'test',
+            'csrfmiddlewaretoken': self.get_csrf_token(),
         })
-        self.assertTemplateUsed(response, 'mumblr/add_entry.html')
+        self.assertTemplateUsed(response, 'mumblr/admin/add_entry.html')
 
         # Check editing an entry does work
-        entry_data[settings.CSRF_COOKIE_NAME] = csrf_token
         response = self.client.post(edit_url, entry_data)
         self.assertRedirects(response, '/', target_status_code=200)
 
@@ -187,41 +178,42 @@ class MumblrTest(TestCase):
     def test_delete_entry(self):
         """Ensure that entries may be deleted.
         """
+        delete_url = '/admin/delete/'
+        data = {
+            'entry_id': self.text_entry.id,
+            'csrfmiddlewaretoken': self.get_csrf_token(),
+        }
+        response = self.client.post(delete_url, data) 
+        self.assertRedirects(response, '/admin/login/?next=' + delete_url,
+                             target_status_code=200)
+
         self.login()
-        response = self.client.get('/')
-        csrf_token = response.context['csrf_token']
 
-        delete_url = '/admin/delete/%s/' % self.html_entry.id
-        # Check CSRF-proof
-        response = self.client.get(delete_url)
-        self.assertEqual(response.status_code, 403)
-
-        token_name = settings.CSRF_COOKIE_NAME
-        response = self.client.get(delete_url + '?%s=%s' % 
-                                   (settings.CSRF_COOKIE_NAME, csrf_token))
+        data['csrfmiddlewaretoken'] = self.get_csrf_token()
+        response = self.client.post(delete_url, data) 
         self.assertRedirects(response, '/')
 
         response = self.client.get('/')
-        self.assertNotContains(response, self.html_entry.rendered_content, 
+        self.assertNotContains(response, self.text_entry.rendered_content, 
                                status_code=200)
 
     def test_delete_comment(self):
         """Ensure that comments can be deleted
         """
         self.login()
-        response = self.client.get('/')
-        csrf_token = response.context['csrf_token']
 
-        comment_id = self.html_entry.comments[0].id
-        delete_url = '/admin/delete-comment/%s/' % comment_id
+        data = {
+            'comment_id': self.text_entry.comments[0].id,
+            'csrfmiddlewaretoken': self.get_csrf_token(),
+        }
+        delete_url = '/admin/delete-comment/'
 
-        response = self.client.get(delete_url + '?%s=%s' %
-                                   (settings.CSRF_COOKIE_NAME, csrf_token))
-        redirect_url = self.html_entry.get_absolute_url() + '#comments'
+        response = self.client.post(delete_url, data)
+        redirect_url = self.text_entry.get_absolute_url() + '#comments'
         self.assertRedirects(response, redirect_url)
 
-        self.html_entry.reload()
-        self.assertEqual(len(self.html_entry.comments), 0)
+        self.text_entry.reload()
+        self.assertEqual(len(self.text_entry.comments), 0)
 
     def test_login_logout(self):
         """Ensure that users may log in and out.
@@ -231,7 +223,9 @@ class MumblrTest(TestCase):
         self.assertFalse(isinstance(response.context['user'], User))
 
         # User logging in
-        response = self.client.post('/admin/login/', self.user_data)
+        data = self.user_data.copy()
+        data['csrfmiddlewaretoken'] = self.get_csrf_token()
+        response = self.client.post('/admin/login/', data)
         self.assertRedirects(response, settings.LOGIN_REDIRECT_URL, 
                              target_status_code=200)
 
@@ -239,14 +233,7 @@ class MumblrTest(TestCase):
         response = self.client.get('/')
         self.assertTrue(isinstance(response.context['user'], User))
 
-        csrf_token = response.context['csrf_token']
-
-        # Check that log out is CSRF-proof
-        #response = self.client.get('/admin/logout/')
-        #self.assertEqual(response.status_code, 403)
-
-        response = self.client.get('/admin/logout/?%s=%s' % 
-                                   (settings.CSRF_COOKIE_NAME, csrf_token))
+        response = self.client.get('/admin/logout/')
         self.assertRedirects(response, '/', target_status_code=200)
 
         # User logged out
@@ -256,9 +243,9 @@ class MumblrTest(TestCase):
     def test_login_requred(self):
         """Ensure that a login is required for restricted pages.
         """
-        restricted_pages = ['/admin/', '/admin/add/html/'] 
-        restricted_pages.append('/admin/edit/%s/' % self.html_entry.id)
-        restricted_pages.append('/admin/delete/%s/' % self.html_entry.id)
+        restricted_pages = ['/admin/', '/admin/add/text/'] 
+        restricted_pages.append('/admin/edit/%s/' % self.text_entry.id)
+        restricted_pages.append('/admin/delete/')
 
         # Check in turn that each of the restricted pages may not be accessed
         for url in restricted_pages:
@@ -274,4 +261,4 @@ class MumblrTest(TestCase):
 
     def tearDown(self):
         self.user.delete()
-        HtmlEntry.objects.delete()
+        TextEntry.objects.delete()
