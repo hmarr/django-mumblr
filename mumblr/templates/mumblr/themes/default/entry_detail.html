@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "mumblr/themes/default/base.html" %}
 
 {% block extrahead %}
 {{ block.super }}
@@ -54,7 +54,7 @@ This post will expire in {{ entry.expiry_date|timeuntil:datenow }}
         {% if user.is_authenticated %}        
         <div class="edit-box">
             <form action="{% url delete-comment %}" method="post">
-                <input type="hidden" value="{{ comment.id }}" name="entry_id" />
+                <input type="hidden" value="{{ comment.id }}" name="comment_id" />
                 <input type="submit" value="Delete" class="mbl-button mbl-button-primary" />
             </form>
         </div>

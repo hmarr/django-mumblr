@@ -1,0 +1,42 @@
+{% load typogrify %}
+
+<html>
+    <head>
+        <title>{{ title|striptags }}{% if title %} | {% endif %}{{ SITE_INFO_TITLE }}</title>
+        <link href="{{ MEDIA_URL }}mumblr/themes/mytheme/style.css" rel="stylesheet" type="text/css" />
+        {% block extrahead %}{% endblock %}
+    </head>
+    <body>
+        <div id="wrapper">
+            <p>
+                <strong>
+                    {% if user.is_authenticated %}
+                        You are logged in as 
+                        {% if user.get_full_name %}
+                            {{ user.get_full_name }} 
+                        {% else %}
+                            {{ user.email }}
+                        {% endif %}
+                        |
+                        <a href="{% url admin %}">Admin</a> | <a href="{% url log-out %}">Log out</a>
+                    {% else %}
+                        <a href="{% url log-in %}">Log in</a>
+                    {% endif %}
+                </strong>
+            </p>
+            <h1><a href="{% url recent-entries %}">{{ SITE_INFO_TITLE }}</a></h1>
+            <div style="text-align: center">
+                <strong><a href="{% url recent-entries %}">Recent Entries</a></strong> |
+                <strong><a href="{% url archive %}">Archive</a></strong> |
+                <strong><a href="{% url tag-cloud %}">Tag Cloud</a></strong> |
+                <strong><a href="{% url feeds "rss" %}">RSS</a>/<a href="{% url feeds "rss" %}">Atom</a></strong>
+            </div>
+            {% if title %}
+                <h2>{{ title|safe|typogrify }}</h2>
+            {% endif %}
+            {% block content %}{% endblock %}
+            <br /><br />
+            <p><em>This site runs <a href="http://github.com/hmarr/django-mumblr">Mumblr</a><em></p>
+        </div>
+    </body>
+</html>

@@ -3,7 +3,7 @@ mongoengine.connect('mumblr-example')
 
 import os
 PROJECT_PATH = os.path.abspath(os.path.dirname(__file__))
-MEDIA_ROOT = os.path.join(PROJECT_PATH, '..', 'mumblr', 'static')
+#MEDIA_ROOT = os.path.join(PROJECT_PATH, '..', 'mumblr', 'static')
 
 SECRET_KEY = '$geoon8_ymg-k)!9wl3wloq4&30w$rhc1*zv%h6m_&nza(4)nk'
 

@@ -1,0 +1,30 @@
+{% extends "mumblr/themes/mytheme/base.html" %}
+
+{% load smart_if %}
+
+{% block content %}
+    <h3>Browse By Type</h3>
+    <div>
+        <strong><a href="{% url archive %}" title="All Entries">All</a></strong>
+    {% for type in entry_types %}
+        | <strong><a href="{% url archive type|lower %}" title="New {{ type }} post">{{ type }}</a></strong>
+    {% endfor %}
+    </div>
+    <h3>{{ entry_type }} Entries</h3>
+    <ul class="lined-list">
+        {% if entries %}
+            {% for entry in entries %}
+                <li>
+                    {% if entry.link_url %}
+                        <a href="{{ entry.link_url }}">
+                    {% else %}
+                        <a href="{{ entry.get_absolute_url }}" title="{{ entry.title|safe }}">
+                    {% endif %}
+                    {{ entry.title|truncatewords:8|safe }}</a></span>&nbsp;<span>{{ entry.publish_date|date:"F jS, Y" }}</span>
+                </li>
+            {% endfor %}
+        {% else %}
+            <p> There are no entries.</p>
+        {% endif %}
+    </ul>
+{% endblock %}

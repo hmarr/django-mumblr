@@ -14,6 +14,7 @@ TIME_ZONE = 'Europe/London'
 LANGUAGE_CODE = 'en-gb'
 USE_I18N = False
 
+MEDIA_ROOT = os.path.join(PROJECT_PATH, 'static')
 MEDIA_URL = '/static/'
 
 SITE_INFO_TITLE = ""
@@ -53,6 +54,7 @@ TEMPLATE_DIRS = (
 INSTALLED_APPS = (
     'django.contrib.sessions',
     'mumblr',
+    'mytheme',
 )
 
 LOGIN_URL = '/admin/login/'
@@ -61,3 +63,4 @@ LOGIN_REDIRECT_URL = '/admin/'
 TEST_RUNNER = 'testrunner.run_tests'
 
 MUMBLR_MARKUP_LANGUAGE = 'markdown'
+MUMBLR_THEME = 'mytheme'

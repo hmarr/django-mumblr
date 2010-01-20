@@ -1,0 +1,63 @@
+{% extends "mumblr/themes/mytheme/base.html" %}
+
+{% block content %}
+    {% if user.is_authenticated %}
+        <div class="edit-box">
+            <a href="{% url edit-entry entry.id %}">Edit</a> |
+            <form style="display: inline" action="{% url delete-entry %}" method="post">
+                <input type="hidden" value="{{ entry.id }}" name="entry_id" />
+                <input type="submit" value="Delete" class="mbl-button mbl-button-primary" />
+            </form>
+        </div>
+    {% endif %}
+    <div class="post-info">
+        <p><span class="date">{{ entry.publish_date|date:"F jS, Y" }}</span></p>
+        {% if entry.tags %}
+            Tagged as
+            {% for tag in entry.tags %}
+                <a class="tag" href="{% url tagged-entries tag %}"><span>{{ tag }}</span></a>
+                {% if not forloop.last %}, {% endif %}
+            {% endfor %}
+        {% endif %}
+    </div>
+    {{ entry.rendered_content|safe }}
+    
+    <h3>Discussion</h3>
+    <a name="comments"></a>
+    {% if entry.comments_enabled %}
+        {% if entry.comments %}
+            <ul class="comments-list">
+            {% for comment in entry.comments %}
+                <div class="comment-info">
+                    <strong>{{ comment.author }}</strong> ({{ comment.date|timesince:datenow }} ago)
+                    {% if user.is_authenticated %}
+                        <div>
+                            <form action="{% url delete-comment %}" method="post">
+                                <input type="hidden" value="{{ comment.id }}" name="comment_id" />
+                                <input type="submit" value="Delete" class="mbl-button mbl-button-primary" />
+                            </form>
+                        </div>
+                    {% endif %}
+                </div>
+                {{ comment.rendered_content|safe }}
+                </li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            There are no comments for this post.
+        {% endif %}
+        <div class="clear"></div>
+        <h3>Leave A Reply</h3>
+        <p>You may use <a href="http://daringfireball.net/projects/markdown/basics">Markdown</a> syntax but raw HTML will be escaped and headings normalised.</p>
+        <form action="" method="post">
+            <table>
+                {{ form }}
+                <tr>
+                    <th></th><td><input type="submit" value="Save" /></td>
+                </tr>
+            </table>
+        </form>
+        {% else %}
+            Comments for this post are closed
+    {% endif %}
+{% endblock %}
