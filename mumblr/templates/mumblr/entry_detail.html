@@ -1,7 +1,5 @@
 {% extends "base.html" %}
 
-{% load mumblr_csrf %}
-
 {% block extrahead %}
 {{ block.super }}
 <script type="text/javascript">
@@ -15,7 +13,11 @@ var RecaptchaOptions = {
 <div class="post-info">
 {% if user.is_authenticated %}
     <div class="edit-box">
-        <a class="mbl-button" href="{% url edit-entry entry.id %}">Edit</a>&nbsp;<a class="mbl-button mbl-button-primary" href="{% url delete-entry entry.id %}?{% csrf_url_token %}">Delete</a>
+        <a class="mbl-button" href="{% url edit-entry entry.id %}">Edit</a>&nbsp;
+        <form action="{% url delete-entry %}" method="post">
+            <input type="hidden" value="{{ entry.id }}" name="entry_id" />
+            <input type="submit" value="Delete" class="mbl-button mbl-button-primary" />
+        </form>
     </div>
 {% endif %}
 <p>
@@ -24,7 +26,7 @@ var RecaptchaOptions = {
 {% else %}
 <span class="comments">Comments closed</span>
 {% endif %}
-&nbsp;<span class="date">{{ entry.date|date:"F jS, Y" }}</span></p>
+&nbsp;<span class="date">{{ entry.publish_date|date:"F jS, Y" }}</span></p>
 {% if entry.tags %}
     <ul class="inline-tag-list">
     {% for tag in entry.tags %}
@@ -51,7 +53,10 @@ This post will expire in {{ entry.expiry_date|timeuntil:datenow }}
         <strong>{{ comment.author }}</strong> <span class="comment-time">{{ comment.date|timesince:datenow }} ago</span>
         {% if user.is_authenticated %}        
         <div class="edit-box">
-            <a class="mbl-button mbl-button-primary" href="{% url delete-comment comment.id %}?{% csrf_url_token %}">Delete</a>
+            <form action="{% url delete-comment %}" method="post">
+                <input type="hidden" value="{{ comment.id }}" name="entry_id" />
+                <input type="submit" value="Delete" class="mbl-button mbl-button-primary" />
+            </form>
         </div>
         {% endif %}
         </div>
@@ -72,7 +77,6 @@ There are no comments for this post.
             <th></th><td><input type="submit" value="Save" /></td>
         </tr>
     </table>
-    {% csrf_form_token %}
 </form>
 {% else %}
 Comments for this post are closed

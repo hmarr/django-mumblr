@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 
-{% load mumblr_csrf %}
 {% load typogrify %}
 
 {% block content %}
@@ -14,7 +13,11 @@
     <div class="entry">
         {% if user.is_authenticated %}
             <div class="edit-box">
-                <a class="mbl-button" href="{% url edit-entry entry.id %}">Edit</a>&nbsp;<a class="mbl-button mbl-button-primary" href="{% url delete-entry entry.id %}?{% csrf_url_token %}">Delete</a>
+                <a class="mbl-button" href="{% url edit-entry entry.id %}">Edit</a>&nbsp;
+                <form action="{% url delete-entry %}" method="post">
+                    <input type="hidden" value="{{ entry.id }}" name="entry_id" />
+                    <input type="submit" value="Delete" />
+                </form>
             </div>
         {% endif %}
         <h3>
@@ -31,7 +34,7 @@
             {% else %}
             <span class="comments">Comments closed</span>
             {% endif %}
-            &nbsp;<span class="date">{{ entry.date|date:"F jS, Y" }}</span></p>
+            &nbsp;<span class="date">{{ entry.publish_date|date:"F jS, Y" }}</span></p>
             {% if entry.tags %}
                 <ul class="inline-tag-list">
                 {% for tag in entry.tags %}

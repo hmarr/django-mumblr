@@ -74,36 +74,30 @@ class EntryType(Document):
     title = StringField(required=True)
     slug = StringField(required=True, regex='[A-z0-9_-]+')
     author = ReferenceField(User)
-    date = DateTimeField(required=True, default=datetime.now)
+    creation_date = DateTimeField(required=True, default=datetime.now)
     tags = ListField(StringField(max_length=50))
     comments = ListField(EmbeddedDocumentField(Comment))
     comments_enabled = BooleanField(default=True)
     published = BooleanField(default=True)
-    publish_date = DateTimeField(required=False, default=None)
+    publish_date = DateTimeField(required=True, default=datetime.now)
     expiry_date = DateTimeField(required=False, default=None)
     link_url = StringField()
 
     meta = {
-        'indexes': ['slug', '-date', 'tags'],
+        'indexes': [('publish_date', 'slug'), '-publish_date', 'tags'],
     }
 
     _types = {}
 
     @queryset_manager
     def live_entries(queryset):
-        return queryset(# Is it published
-                        Q(published=True) &
-                        # Is it past publish date
-                        (Q(publish_date__lte=datetime.now()) |
-                         Q(publish_date=None)) &
-                        # Is it earlier than expiry date
-                        (Q(expiry_date__gt=datetime.now()) |
-                         Q(expiry_date=None))
-                        )
+        queryset(Q(expiry_date__gt=datetime.now()) | Q(expiry_date=None),
+                 published=True, publish_date__lte=datetime.now())
+        return queryset.order_by('-publish_date')
 
     @permalink
     def get_absolute_url(self):
-        date = self.date.strftime('%Y/%b/%d').lower()
+        date = self.publish_date.strftime('%Y/%b/%d').lower()
         return ('entry-detail', (date, self.slug))
 
     def rendered_content(self):
@@ -123,13 +117,15 @@ class EntryType(Document):
         tags = forms.CharField(required=False)
         published = forms.BooleanField(required=False)
         publish_date = forms.DateTimeField(
-            widget=SelectDateWidget(required=False),
-            required=False)
+            widget=SelectDateWidget(),
+            required=True
+        )
         expiry_date = forms.DateTimeField(
             widget=SelectDateWidget(required=False),
-            required=False)
+            required=False
+        )
         comments_enabled = forms.BooleanField(required=False, label="Comments")
-
+        
     @classmethod
     def register(cls, entry_type):
         """Register an EntryType subclass.

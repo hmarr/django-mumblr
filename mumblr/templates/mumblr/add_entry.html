@@ -1,7 +1,5 @@
 {% extends "base.html" %}
 
-{% load mumblr_csrf %}
-
 {% block content %}
 <form action="" method="post">
     <table>
@@ -10,6 +8,5 @@
             <th></th><td><input type="submit" value="Save" /></td>
         </tr>
     </table>
-    {% csrf_form_token %}
 </form>
 {% endblock %}

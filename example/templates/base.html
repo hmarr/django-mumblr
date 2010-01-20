@@ -1,5 +1,3 @@
-{% load mumblr_csrf %}
-
 {% load typogrify %}
 
 <html>
@@ -53,7 +51,7 @@
                         {% endif %}
                         </h4>
                         <p>Welcome back!</p>
-                        <p><a class="mbl-button" href="{% url admin %}">Admin</a>&nbsp;<a class="mbl-button mbl-button-primary" href="{% url log-out %}?{% csrf_url_token %}">Log out</a>
+                        <p><a class="mbl-button" href="{% url admin %}">Admin</a>&nbsp;<a class="mbl-button mbl-button-primary" href="{% url log-out %}">Log out</a>
                         </p>
                     </div>
                 </div>
