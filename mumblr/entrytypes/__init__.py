@@ -4,7 +4,7 @@ from django.db.models import permalink
 from django.forms.extras.widgets import SelectDateWidget
 import fields
 
-from datetime import datetime
+from datetime import datetime, date
 import re
 from uuid import uuid4
 from mongoengine import *
@@ -119,8 +119,11 @@ class EntryType(Document):
         tags = forms.CharField(required=False)
         published = forms.BooleanField(required=False)
         # If not provided, it will be set to datetime.now()
+        this_year = date.today().year
         publish_date = forms.DateTimeField(
-            widget=SelectDateWidget(),
+            widget=SelectDateWidget(
+                years=range(this_year-5, this_year+5)
+            ),
         )
         publish_time = forms.TimeField()
         expiry_date = forms.DateTimeField(
