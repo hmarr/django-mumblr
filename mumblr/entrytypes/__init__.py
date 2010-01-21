@@ -32,10 +32,6 @@ def markup(text, small_headings=False, no_follow=True):
 
     return text
 
-def today():
-    now = datetime.now()
-    return datetime(now.year, now.month, now.day)
-
 
 class Comment(EmbeddedDocument):
     """A comment that may be embedded within a post.
@@ -83,7 +79,7 @@ class EntryType(Document):
     comments = ListField(EmbeddedDocumentField(Comment))
     comments_enabled = BooleanField(default=True)
     published = BooleanField(default=True)
-    publish_date = DateTimeField(required=True, default=today)
+    publish_date = DateTimeField(required=True, default=datetime.now)
     expiry_date = DateTimeField(required=False, default=None)
     link_url = StringField()
 
@@ -95,8 +91,9 @@ class EntryType(Document):
 
     @queryset_manager
     def live_entries(queryset):
+        cutoff_date = datetime.now().replace(hour=23, minute=59, second=59)
         queryset(Q(expiry_date__gt=datetime.now()) | Q(expiry_date=None),
-                 published=True, publish_date__lte=datetime.now())
+                 published=True, publish_date__lte=cutoff_date)
         return queryset.order_by('-publish_date')
 
     @permalink
@@ -120,10 +117,11 @@ class EntryType(Document):
         slug = forms.CharField()
         tags = forms.CharField(required=False)
         published = forms.BooleanField(required=False)
+        # If not provided, it will be set to datetime.now()
         publish_date = forms.DateTimeField(
             widget=SelectDateWidget(),
-            required=True
         )
+        publish_time = forms.TimeField()
         expiry_date = forms.DateTimeField(
             widget=SelectDateWidget(required=False),
             required=False

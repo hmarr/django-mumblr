@@ -8,7 +8,7 @@ from django.contrib.syndication.feeds import Feed
 from django.utils.feedgenerator import Atom1Feed
 from django.utils.functional import lazy
 
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from mumblr.entrytypes import markup, EntryType, Comment
 from mumblr.entrytypes.core import HtmlComment
@@ -68,12 +68,14 @@ def entry_detail(request, date, slug):
     """Display one entry with the given slug and date.
     """
     try:
-        date = datetime.strptime(date, "%Y/%b/%d")
+        today = datetime.strptime(date, "%Y/%b/%d")
+        tomorrow = today + timedelta(days=1)
     except:
         raise Http404
 
     try:
-        entry = EntryType.objects(publish_date=date, slug=slug)[0]
+        entry = EntryType.objects(publish_date__gte=today, 
+                                  publish_date__lt=tomorrow, slug=slug)[0]
     except IndexError:
         raise Http404
 
@@ -96,9 +98,7 @@ def entry_detail(request, date, slug):
     else:
         form = form_class(request.user)
 
-    entry_url = entry.link_url or entry.get_absolute_url()
     context = {
-        'title': '<a href="%s">%s</a>' % (entry_url, entry.title),
         'entry': entry,
         'datenow': datetime.now(),
         'form': form,

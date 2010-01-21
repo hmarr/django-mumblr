@@ -2,7 +2,11 @@
 
 {% load typogrify %}
 
+{% block title %}{{ title }}{% endblock %}
+
 {% block content %}
+<h2>{{ title }}</h2>
+<div class="clear"></div>
 {% if not entries.object_list %}
     There are no recent entries. {{ no_entries_messages|random|safe }}
 {% endif %}
@@ -26,7 +30,8 @@
             {% else %}
                 <a href="{{ entry.get_absolute_url }}">
             {% endif %}
-            {{ entry.title|safe|typogrify }}</a></h3>
+            {{ entry.title|safe|typogrify }}</a>
+        </h3>
             <div class="post-info">
             <p>
             {% if entry.comments_enabled %}

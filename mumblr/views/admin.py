@@ -9,7 +9,7 @@ from django.conf import settings
 from django.contrib.syndication.feeds import Feed
 from django.utils.feedgenerator import Atom1Feed
 
-from datetime import datetime
+from datetime import datetime, time
 from mongoengine.django.auth import REDIRECT_FIELD_NAME
 from pymongo.son import SON
 
@@ -50,20 +50,34 @@ def edit_entry(request, entry_id):
         if form.is_valid():
             # Get necessary post data from the form
             for field, value in form.cleaned_data.items():
-                entry[field] = value
+                if field in entry._fields.keys():
+                    entry[field] = value
             entry.tags = entry.tags.lower()
             if ',' in entry.tags:
                 entry.tags = [tag.strip() for tag in entry.tags.split(',')]
             else:
                 entry.tags = [tag.strip() for tag in entry.tags.split()]
+
+            publish_time = form.cleaned_data['publish_time']
+            entry.publish_date = entry.publish_date.replace(
+                hour=publish_time.hour,
+                minute=publish_time.minute,
+                second=publish_time.second,
+            )
+
             # Save the entry to the DB
             entry.save()
-            return HttpResponseRedirect(reverse('recent-entries'))
+            return HttpResponseRedirect(entry.get_absolute_url())
     else:
         fields = entry._fields.keys()
         field_dict = dict([(name, entry[name]) for name in fields])
         # tags are stored as a list in the db, convert them back to a string
         field_dict['tags'] = ', '.join(field_dict['tags'])
+        field_dict['publish_time'] = time(
+            hour=entry.publish_date.hour,
+            minute=entry.publish_date.minute,
+            second=entry.publish_date.second,
+        )
         form = form_class(field_dict)
 
     context = {
@@ -98,11 +112,22 @@ def add_entry(request, type):
                 entry.tags = [tag.strip() for tag in entry.tags.split(',')]
             else:
                 entry.tags = [tag.strip() for tag in entry.tags.split()]
+
+            publish_time = form.cleaned_data['publish_time']
+            entry.publish_date = entry.publish_date.replace(
+                hour=publish_time.hour,
+                minute=publish_time.minute,
+                second=publish_time.second,
+            )
+
             # Save the entry to the DB
             entry.save()
-            return HttpResponseRedirect(reverse('recent-entries'))
+            return HttpResponseRedirect(entry.get_absolute_url())
     else:
-        form = form_class(initial={'publish_date': datetime.now()})
+        form = form_class(initial={
+            'publish_date': datetime.now(),
+            'publish_time': datetime.now().time(),
+        })
 
     context = {
         'title': 'Add %s Entry' % type,

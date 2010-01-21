@@ -2,7 +2,7 @@
 
 <html>
     <head>
-        <title>{{ title|striptags }}{% if title %} | {% endif %}{{ SITE_INFO_TITLE }}</title>
+        <title>{% block title %}{% endblock %} | {{ SITE_INFO_TITLE }}</title>
         <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}mumblr/themes/default/css/reset.css" />
         <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}mumblr/themes/default/css/pygments.css" />
         <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}mumblr/themes/default/css/grey-theme.css" />
@@ -57,11 +57,6 @@
                 </div>
                 {% endif %}
             </div> <!-- /left-column -->
-
-            {% if title %}
-                <h2>{{ title|safe|typogrify }}</h2>
-                <div class="clear"></div>
-            {% endif %}
 
             {% block content %}{% endblock %}
             </div> <!-- /content-->

@@ -2,7 +2,12 @@
 
 {% load smart_if %}
 
+{% block title %}Admin{% endblock %}
+
 {% block content %}
+<h2>Admin</h2>
+<div class="clear"></div>
+
 <h3>New Post</h3>
 <ul class="inline">
 {% for type in entry_types %}

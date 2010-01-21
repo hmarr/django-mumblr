@@ -3,9 +3,10 @@ from django.conf import settings
 
 import mongoengine
 from mongoengine.django.auth import User
-import re
 
-from mumblr.entrytypes import today
+import re
+from datetime import datetime
+
 from mumblr.entrytypes.core import TextEntry, HtmlComment 
 
 mongoengine.connect('mumblr-unit-tests')
@@ -22,7 +23,7 @@ class MumblrTest(TestCase):
         pass
 
     def login(self):
-        self.client.get('/admin/login/')
+        r = self.client.get('/admin/login/')
         data = self.user_data.copy()
         data['csrfmiddlewaretoken'] = self.get_csrf_token()
         return self.client.post('/admin/login/', data)
@@ -67,7 +68,7 @@ class MumblrTest(TestCase):
                             status_code=200)
 
     def test_entry_detail(self):
-        """Ensure that the recent entries page works properly.
+        """Ensure that the entry detail page works properly.
         """
         response = self.client.get(self.text_entry.get_absolute_url())
         self.assertContains(response, self.text_entry.rendered_content, 
@@ -102,7 +103,10 @@ class MumblrTest(TestCase):
             'tags': 'tests',
             'published': 'true',
             'content': 'test',
-            'publish_date': today(),
+            'publish_date_year': datetime.now().year,
+            'publish_date_month': datetime.now().month,
+            'publish_date_day': datetime.now().day,
+            'publish_time': datetime.now().strftime('%H:%M:%S'),
             'rendered_content': '<p>test</p>',
             'csrfmiddlewaretoken': self.get_csrf_token(),
         }
@@ -115,7 +119,9 @@ class MumblrTest(TestCase):
 
         # Check adding an entry does work
         response = self.client.post('/admin/add/text/', entry_data)
-        self.assertRedirects(response, '/', target_status_code=200)
+        entry = TextEntry(slug=entry_data['slug'], publish_time=datetime.now())
+        url = entry.get_absolute_url()
+        self.assertRedirects(response, url, target_status_code=200)
 
         response = self.client.get('/')
         self.assertContains(response, entry_data['content'])
@@ -157,7 +163,10 @@ class MumblrTest(TestCase):
             'title': self.text_entry.title,
             'slug': self.text_entry.slug,
             'published': 'true',
-            'publish_date': today(),
+            'publish_date_year': datetime.now().year,
+            'publish_date_month': datetime.now().month,
+            'publish_date_day': datetime.now().day,
+            'publish_time': datetime.now().strftime('%H:%M:%S'),
             'content': 'modified-test-content',
             'csrfmiddlewaretoken': self.get_csrf_token(),
         }
@@ -170,7 +179,9 @@ class MumblrTest(TestCase):
 
         # Check editing an entry does work
         response = self.client.post(edit_url, entry_data)
-        self.assertRedirects(response, '/', target_status_code=200)
+        entry = TextEntry(slug=entry_data['slug'], publish_time=datetime.now())
+        url = entry.get_absolute_url()
+        self.assertRedirects(response, url, target_status_code=200)
 
         response = self.client.get('/')
         self.assertContains(response, entry_data['content'])
