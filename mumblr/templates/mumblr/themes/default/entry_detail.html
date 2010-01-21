@@ -18,7 +18,11 @@ var RecaptchaOptions = {
     {% if entry.link_url %}
         <a target="_blank" class="external-link" href="{{ entry.link_url }}">
     {% else %}
-        <a href="{{ entry.get_absolute_url }}">
+        {% if entry.video_url %}
+            <a target="_blank" class="video" href="{{ entry.video_url }}">
+        {% else %}
+            <a href="{{ entry.get_absolute_url }}">
+        {% endif %}
     {% endif %}
         {{ entry.title|typogrify }}
     </a>

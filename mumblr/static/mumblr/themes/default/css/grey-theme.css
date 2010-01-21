@@ -196,6 +196,28 @@ h3 a.external-link:hover {
     background-position: 0 -45px;
 }
 
+h2 a.video {
+    background: url('../images/video.png') 0 6px no-repeat;
+    padding-left: 30px;
+    position: relative;
+    left: -30px;
+}
+
+h2 a.video:hover {
+    background-position: 0 -40px;
+}
+
+h3 a.video {
+    background: url('../images/video.png') 0 1px no-repeat;
+    padding-left: 30px;
+    position: relative;
+    left: -30px;
+}
+
+h3 a.video:hover {
+    background-position: 0 -45px;
+}
+
 /*
  *
  * Lists
@@ -563,7 +585,7 @@ li .edit-box {
     color: #777;
 }
 
-.content > img, .content .entry > img {
+.content > img, .content .entry > img, object {
     border: 10px solid #eee;
     margin: 20px 0 20px -40px;
     width: 620px;
