@@ -13,7 +13,7 @@
     <h3>{{ entry_type }} Entries</h3>
     <ul class="lined-list">
         {% if entries %}
-            {% for entry in entries %}
+            {% for entry in entries.object_list %}
                 <li>
                     {% if entry.link_url %}
                         <a href="{{ entry.link_url }}">
