@@ -48,22 +48,20 @@
     </li>
 {% endfor %}
 </ul>
+{% if entries.object_list %}
 <div class="pagination">
 {% spaceless %}
 {% if entries.has_previous %}
-    <a href="{% url archive entries.previous_page_number %}">
-        &laquo; Newer
-    </a>
+    <a href="{% url archive entries.previous_page_number %}">&laquo; Newer</a>
 {% else %}
     <span class="disabled">&laquo; Newer</span>
 {% endif %}
 {% if entries.has_next %}
-    <a href="{% url archive entries.next_page_number %}">
-        Older &raquo;
-    </a>
+    <a href="{% url archive entries.next_page_number %}">Older &raquo;</a>
 {% else %}
     <span class="disabled">Older &laquo;</span>
 {% endif %}
 {% endspaceless %}
 </div>
+{% endif %}
 {% endblock %}

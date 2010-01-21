@@ -27,7 +27,7 @@ def _lookup_template(name):
 def archive(request, entry_type=None, page_number=1):
     """Display an archive of posts.
     """
-    num = 1
+    num = getattr(settings, 'MUMBLR_NUM_ENTRIES_PER_PAGE', 10)
     entry_types = [e.type for e in EntryType._types.values()]
     entry_class = EntryType
     type = "All"
