@@ -23,7 +23,7 @@ def dashboard(request):
     """Display the main admin page.
     """
     entry_types = [e.type for e in EntryType._types.values()]
-    entries = EntryType.objects[:10]
+    entries = EntryType.objects.order_by('-publish_date')[:10]
 
     context = {
         'entry_types': entry_types,

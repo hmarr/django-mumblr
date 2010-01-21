@@ -115,11 +115,11 @@ h4 {
     font-size: 1.2em;
 }
 
-.date, .comment-time {
+.date, .comment-time, .comments {
     color: #777;
 }
 
-a.comments, span.comments {
+a.comments-small, span.comments-small {
     font-weight: bold;
     font-size: 12px;
     padding: 4px 5px 2px 5px;
@@ -529,6 +529,7 @@ a.tag:hover span {
     position: absolute;
     top: 0px;
     right: 0px;
+    white-space: nowrap;
 }
 
 li .edit-box {
