@@ -23,7 +23,7 @@ class MumblrTest(TestCase):
         pass
 
     def login(self):
-        r = self.client.get('/admin/login/')
+        self.client.get('/admin/login/')
         data = self.user_data.copy()
         data['csrfmiddlewaretoken'] = self.get_csrf_token()
         return self.client.post('/admin/login/', data)

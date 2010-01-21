@@ -45,6 +45,7 @@
     {% else %}
     <span class="comments">Off</span>
     {% endif %}
+    <a class="mbl-button" href="{% url edit-entry entry.id %}">Edit</a>&nbsp;
     <form action="{% url delete-entry %}" method="post">
         <input type="hidden" value="{{ entry.id }}" name="entry_id" />
         <input type="submit" value="Delete" class="mbl-button mbl-button-primary" />

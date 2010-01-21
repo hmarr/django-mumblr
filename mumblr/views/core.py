@@ -38,7 +38,6 @@ def archive(request, entry_type=None):
     entries = entry_class.live_entries()[:10]
 
     context = {
-        'title': 'Archive',
         'entry_types': entry_types,
         'entries': entries,
         'entry_type': type,
@@ -91,7 +90,8 @@ def entry_detail(request, date, slug):
                 comment.is_admin = True
             # Update entry with comment
             q = EntryType.objects(id=entry.id)
-            comment.rendered_content = markup(comment.body, True)
+            comment.rendered_content = markup(comment.body, escape=True,
+                                              small_headings=True)
             q.update(push__comments=comment)
 
             return HttpResponseRedirect(entry.get_absolute_url()+'#comments')
@@ -135,7 +135,6 @@ def tag_cloud(request):
     freqs.reverse()
 
     context = {
-        'title': 'Tag Cloud',
         'tag_cloud': freqs,
     }
     return render_to_response(_lookup_template('tag_cloud'), context,

@@ -26,7 +26,6 @@ def dashboard(request):
     entries = EntryType.objects[:10]
 
     context = {
-        'title': 'Mumblr Admin',
         'entry_types': entry_types,
         'entries': entries,
         'datenow': datetime.now(),
@@ -58,6 +57,9 @@ def edit_entry(request, entry_id):
             else:
                 entry.tags = [tag.strip() for tag in entry.tags.split()]
 
+            # We're using publish_time to get the time from the user - in
+            # the DB its actually just part of publish_date, so update
+            # publish_date to include publish_time's info
             publish_time = form.cleaned_data['publish_time']
             entry.publish_date = entry.publish_date.replace(
                 hour=publish_time.hour,
@@ -65,7 +67,6 @@ def edit_entry(request, entry_id):
                 second=publish_time.second,
             )
 
-            # Save the entry to the DB
             entry.save()
             return HttpResponseRedirect(entry.get_absolute_url())
     else:
@@ -73,6 +74,7 @@ def edit_entry(request, entry_id):
         field_dict = dict([(name, entry[name]) for name in fields])
         # tags are stored as a list in the db, convert them back to a string
         field_dict['tags'] = ', '.join(field_dict['tags'])
+        # publish_time isn't initialised as it doesn't have a field in the DB
         field_dict['publish_time'] = time(
             hour=entry.publish_date.hour,
             minute=entry.publish_date.minute,
