@@ -22,7 +22,7 @@
         {% endif %}
         <h3>
             {% if entry.link_url %}
-                <a href="{{ entry.link_url }}">
+                <a target="_blank" class="external-link" href="{{ entry.link_url }}">
             {% else %}
                 <a href="{{ entry.get_absolute_url }}">
             {% endif %}
@@ -45,6 +45,7 @@
             <div class="clear"></div>
             </div>
         {{ entry.rendered_content|safe|typogrify }}
+        <a href="{{ entry.get_absolute_url }}" style="float: right">Permalink</a>
     </div>
 {% endfor %}
 {% if entries.has_other_pages %}

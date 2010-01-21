@@ -236,6 +236,17 @@ ol li { list-style-type: decimal; }
     border-bottom: 1px dotted #CFD0C6;
 }
 
+h3 a.external-link, h2 a.external-link {
+    background: url('../images/external-link.png') 0 1px no-repeat;
+    padding-left: 30px;
+    position: relative;
+    left: -30px;
+    min-height: 20px;
+}
+
+h3 a.external-link:hover, h2 a.external-link:hover {
+    background-position: 0 -45px;
+}
 
 /*
  *

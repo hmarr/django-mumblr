@@ -63,4 +63,4 @@ LOGIN_REDIRECT_URL = '/admin/'
 TEST_RUNNER = 'testrunner.run_tests'
 
 MUMBLR_MARKUP_LANGUAGE = 'markdown'
-MUMBLR_THEME = 'mytheme'
+#MUMBLR_THEME = 'mytheme'
