@@ -97,14 +97,15 @@ class VideoEntry(EntryType):
             '0" height="338"></embed></object>'
         ),
         'youtube': (
-            '<object width="600" height="361">'
+            '<object width="600" height="338">'
             '<param name="movie" value="{{!ID}}"></param>'
             '<param name="allowFullScreen" value="true"></param>'
             '<param name="allowscriptaccess" value="always"></param>'
             '<embed src="http://www.youtube.com/v/{{!ID}}&fs=1&rel=&'
-            'hd=10&showinfo=0type="application/x-shockwave-flash" '
+            'hd=10&showinfo=0&iv_load_policy=3" ' 
+            'type="application/x-shockwave-flash" '
             'allowscriptaccess="always" allowfullscreen="true" '
-            'width="600" height="361"></embed></object>'
+            'width="600" height="338"></embed></object>'
         )
     }
 
