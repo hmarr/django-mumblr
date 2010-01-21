@@ -41,6 +41,8 @@
             {% else %}
             <span class="comments">Comments closed</span>
             {% endif %}
+            &mdash;
+            <a href="{{ entry.get_absolute_url }}" class="permalink">Permalink</a>
             </p>
             {% if entry.tags %}
                 <ul class="inline-tag-list">
@@ -52,22 +54,28 @@
             <div class="clear"></div>
             </div>
         {{ entry.rendered_content|safe|typogrify }}
-        <a href="{{ entry.get_absolute_url }}" style="float: right">Permalink</a>
     </div>
 {% endfor %}
 {% if entries.has_other_pages %}
     <div class="hr-styled"></div>
 {% endif %}
+<div class="clear"></div>
+<div class="pagination">
+{% spaceless %}
 {% if entries.has_previous %}
-    <a href="{% url recent-entries entries.previous_page_number %}" style="float: left;">
-        <h4>&lt;&lt; Newer</h4>
+    <a href="{% url recent-entries entries.previous_page_number %}">
+        &laquo; Newer
     </a>
-    <br />
+{% else %}
+    <span class="disabled">&laquo; Newer</span>
 {% endif %}
 {% if entries.has_next %}
-    <a href="{% url recent-entries entries.next_page_number %}" style="float: right;">
-        <h4>Older &gt;&gt;</h4>
+    <a href="{% url recent-entries entries.next_page_number %}">
+        Older &raquo;
     </a>
-    <br />
+{% else %}
+    <span class="disabled">Older &laquo;</span>
 {% endif %}
+{% endspaceless %}
+</div>
 {% endblock %}

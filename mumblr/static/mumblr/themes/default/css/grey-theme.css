@@ -115,7 +115,7 @@ h4 {
     font-size: 1.2em;
 }
 
-.date, .comment-time, .comments {
+.date, .comment-time, .comments, .permalink {
     color: #777;
 }
 
@@ -568,4 +568,29 @@ li .edit-box {
     margin: 20px 0 20px -40px;
     width: 620px;
     position: relative;
+}
+
+.pagination {
+    text-align: center;
+    clear: both;
+}
+
+.pagination a, .pagination span.disabled {
+    font-weight: bold;
+    font-size: 12px;
+    padding: 4px 5px 2px 5px;
+    border: 1px solid #666;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    margin-right: 5px;
+}
+
+.pagination span.disabled {
+    color: #ccc;
+    border-color: #ccc;
+}
+
+.pagination a:hover {
+    border-color: #999;
 }

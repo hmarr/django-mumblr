@@ -24,9 +24,10 @@ def _lookup_template(name):
     theme = getattr(settings, 'MUMBLR_THEME', 'default')
     return 'mumblr/themes/%s/%s.html' % (theme, name)
 
-def archive(request, entry_type=None):
+def archive(request, entry_type=None, page_number=1):
     """Display an archive of posts.
     """
+    num = 1
     entry_types = [e.type for e in EntryType._types.values()]
     entry_class = EntryType
     type = "All"
@@ -35,11 +36,16 @@ def archive(request, entry_type=None):
         entry_class = EntryType._types[entry_type.lower()]
         type = entry_class.type
 
-    entries = entry_class.live_entries()[:10]
+    paginator = Paginator(entry_class.live_entries(), num)
+    try:
+        entries = paginator.page(page_number)
+    except (EmptyPage, InvalidPage):
+        entries = paginator.page(paginator.num_pages)
 
     context = {
         'entry_types': entry_types,
         'entries': entries,
+        'num_entries': entry_class.live_entries().count(),
         'entry_type': type,
     }
     return render_to_response(_lookup_template('archive'), context,

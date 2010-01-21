@@ -16,10 +16,12 @@
 {% endfor %}
 </ul>
 <div class="clear"></div>
-<h3>{{ entry_type }} Entries&nbsp; { {{ entries|length }} }</h3>
+<h3>{{ entry_type }} Entries&nbsp; { {{ num_entries }} }</h3>
 <ul class="lined-list">
-{% if entries %}
-{% for entry in entries %}
+{% if not entries.object_list %}
+    <p> There are no entries.</p>
+{% endif %}
+{% for entry in entries.object_list %}
     {% if forloop.first %}
     <li class="first">
     {% else %}
@@ -45,8 +47,23 @@
     </div>
     </li>
 {% endfor %}
-{% else %}
-    <p> There are no entries.</p>
-{% endif %}
 </ul>
+<div class="pagination">
+{% spaceless %}
+{% if entries.has_previous %}
+    <a href="{% url archive entries.previous_page_number %}">
+        &laquo; Newer
+    </a>
+{% else %}
+    <span class="disabled">&laquo; Newer</span>
+{% endif %}
+{% if entries.has_next %}
+    <a href="{% url archive entries.next_page_number %}">
+        Older &raquo;
+    </a>
+{% else %}
+    <span class="disabled">Older &laquo;</span>
+{% endif %}
+{% endspaceless %}
+</div>
 {% endblock %}
