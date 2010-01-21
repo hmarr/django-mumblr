@@ -2,7 +2,7 @@ DEBUG = True
 TEMPLATE_DEBUG = True
 
 ADMINS = (
-    ('Steve Challis', 'steve.challis@gmail.com'),
+    ('Harry Marr', 'harry.marr@gmail.com'),
 )
 
 MANAGERS = ADMINS
@@ -17,8 +17,8 @@ USE_I18N = False
 MEDIA_ROOT = os.path.join(PROJECT_PATH, 'static')
 MEDIA_URL = '/static/'
 
-SITE_INFO_TITLE = "Journal"
-SITE_INFO_DESC = "By Steve Challis"
+SITE_INFO_TITLE = ""
+SITE_INFO_DESC = ""
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (

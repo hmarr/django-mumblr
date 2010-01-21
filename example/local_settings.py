@@ -1,5 +1,5 @@
 import mongoengine
-mongoengine.connect('steve-blog')
+mongoengine.connect('mumblr-example')
 
 import os
 PROJECT_PATH = os.path.abspath(os.path.dirname(__file__))
