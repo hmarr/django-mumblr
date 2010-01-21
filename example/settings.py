@@ -17,9 +17,6 @@ USE_I18N = False
 MEDIA_ROOT = os.path.join(PROJECT_PATH, 'static')
 MEDIA_URL = '/static/'
 
-SITE_INFO_TITLE = ""
-SITE_INFO_DESC = ""
-
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.load_template_source',

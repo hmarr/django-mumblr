@@ -585,7 +585,7 @@ li .edit-box {
     color: #777;
 }
 
-.content > img, .content .entry > img, object {
+.content > img, .content .entry > img, {
     border: 10px solid #eee;
     margin: 20px 0 20px -40px;
     width: 620px;

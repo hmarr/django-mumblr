@@ -82,26 +82,48 @@ class VideoEntry(EntryType):
 
     type = 'Video'
 
+    embed_codes = {
+        'vimeo': (
+            '<object width="600" height="338"><param name="allowfullscr'
+            'een" value="true" /><param name="allowscriptaccess" value='
+            '"always" /><param name="movie" value="http://vimeo.com/moo'
+            'galoop.swf?clip_id={{!ID}}&amp;server=vimeo.com&amp;show_t'
+            'itle=0&amp;show_byline=0&amp;show_portrait=0&amp;color=59a'
+            '5d1&amp;fullscreen=1" /><embed src="http://vimeo.com/mooga'
+            'loop.swf?clip_id=8833777&amp;server=vimeo.com&amp;show_tit'
+            'le=0&amp;show_byline=0&amp;show_portrait=0&amp;color=59a5d'
+            '1&amp;fullscreen=1" type="application/x-shockwave-flash" a'
+            'llowfullscreen="true" allowscriptaccess="always" width="60'
+            '0" height="338"></embed></object>'
+        ),
+        'youtube': (
+            '<object width="600" height="361">'
+            '<param name="movie" value="{{!ID}}"></param>'
+            '<param name="allowFullScreen" value="true"></param>'
+            '<param name="allowscriptaccess" value="always"></param>'
+            '<embed src="http://www.youtube.com/v/{{!ID}}&fs=1&rel=&'
+            'hd=10&showinfo=0type="application/x-shockwave-flash" '
+            'allowscriptaccess="always" allowfullscreen="true" '
+            'width="600" height="361"></embed></object>'
+        )
+    }
+
+    embed_patterns = (
+        ('youtube', r'youtube\.com\/watch\?v=([A-Za-z0-9._%-]+)[&\w;=\+_\-]*'),
+        ('vimeo', r'vimeo\.com\/(\d+)'),
+    )
+
     def rendered_content(self):
         video_url = self.video_url
-        pattern = r'youtube\.com\/watch\?v=([A-Za-z0-9._%-]+)[&\w;=\+_\-]*'
-        id = re.findall(pattern, video_url)
-        flash_url = 'http://www.youtube.com/v/%s&fs=1&rel=&hd=10&showinfo=0'
-        embed = '<object width="620" height="360">' \
-                '<param name="movie" value="%s"></param>' \
-                '<param name="allowFullScreen" value="true"></param>' \
-                '<param name="allowscriptaccess" value="always"></param>' \
-                '<embed src="%s"' \
-                'type="application/x-shockwave-flash" ' \
-                'allowscriptaccess="always" allowfullscreen="true" ' \
-                'width="620" height="360"></embed></object>'
-        if id:
-            # We found at least one ID so put it in a url
-            url = flash_url % id[0]
-            # Put url in embedding template
-            html = embed % (url, url)
+        for source, pattern in VideoEntry.embed_patterns:
+            id = re.findall(pattern, video_url)
+            if id:
+                embed = VideoEntry.embed_codes[source]
+                html = embed.replace('{{!ID}}', id[0])
+                break
         else:
             html = 'Video: <a href="video_url">%s</a>' % video_url
+
         if self.description:
             html += markup(self.description)
         return html
