@@ -41,8 +41,20 @@ em {
     font-style: italic;
 }
 
+abbr {
+    border-bottom: 1px dotted #ccc;
+}
+
 strong {
     font-weight: bold;
+}
+
+sup {
+    vertical-align: super;
+}
+
+sub {
+    vertical-align: sub;
 }
 
 pre {
@@ -303,7 +315,7 @@ select {
 input[type=text], input[type=password], textarea {
     border: 2px solid #eee;
     padding: 3px;
-    width: 600px;
+    width: 590px;
     font-size: 14px;
 }
 
@@ -516,6 +528,21 @@ a.tag span {
 
 a.tag:hover span {
     background-position: left bottom;
+}
+
+hr {
+    display: block;
+    position: relative;
+    padding: 0;
+    margin: 20px auto;
+    height: 0;
+    max-height: 0;
+    width: 100%;
+    clear: both;
+    border: none;
+    border-top: 1px solid #ccc;
+    font-size: 1px;
+    line-height: 0;
 }
 
 .hr-styled {

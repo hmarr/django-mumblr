@@ -1,6 +1,7 @@
 {% load typogrify %}
 
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
         <title>{% block title %}{% endblock %} | {{ SITE_INFO_TITLE }}</title>
         <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}mumblr/themes/default/css/reset.css" />
@@ -19,6 +20,7 @@
             <div class="content">
 
             <div class="left-column">
+
                 <div class="fold-box">
                     <span class="fold"></span>
                     <div class="fold-box-padder">
@@ -26,7 +28,6 @@
                         <h4 class="author">{{ SITE_INFO_DESC }}</h4></p>
                     </div>
                 </div>
-
 
                 <div class="fold-box">
                     <span class="fold"></span>
@@ -59,9 +60,11 @@
             </div> <!-- /left-column -->
 
             {% block content %}{% endblock %}
+
             </div> <!-- /content-->
         </div> <!-- /pagehead -->
         </div> <!-- /container -->
+
         <div class="footer">
             <div class="container">
             {% if not user.is_authenticated %}
@@ -73,6 +76,7 @@
             <p>Mumblr is a basic <a href="http://www.djangoproject.com/">Django</a> tumblelog application that uses <a href="http://www.mongodb.org">MongoDB</a> with <a href="http://github.com/hmarr/mongoengine">MongoEngine</a>. Fork it on <a href="http://github.com/hmarr/django-mumblr">Github</a>. Designed and developed by <a href="http://hmarr.com">Harry Marr</a> and <a href="http://stevechallis.com">Steve Challis</a>.</p>
             </div>
             </div>
-        </div>
+        </div> <!-- /footer -->
+
     </body>
 </html>

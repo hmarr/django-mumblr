@@ -21,9 +21,11 @@ def markup(text, small_headings=False, no_follow=True, escape=False):
         safe_mode = 'escape' if escape else None
         try:
             import pygments
-            text = markdown.markdown(text, ['codehilite'], safe_mode=safe_mode)
+            text = markdown.markdown(text, ['codehilite', 'footnotes', 'abbr'],
+                                     safe_mode=safe_mode)
         except ImportError:
-            text = markdown.markdown(text, safe_mode=safe_mode)
+            text = markdown.markdown(text, ['footnotes', 'abbr'],
+                                     safe_mode=safe_mode)
     
     if small_headings:
         text = re.sub('<(/?h)[1-6]', '<\g<1>5', text)
@@ -117,7 +119,7 @@ class EntryType(Document):
         title = forms.CharField()
         slug = forms.CharField()
         tags = forms.CharField(required=False)
-        published = forms.BooleanField(required=False)
+        published = forms.BooleanField(required=False, initial=True)
         # If not provided, it will be set to datetime.now()
         this_year = date.today().year
         publish_date = forms.DateTimeField(
@@ -130,7 +132,9 @@ class EntryType(Document):
             widget=SelectDateWidget(required=False),
             required=False
         )
-        comments_enabled = forms.BooleanField(required=False, label="Comments")
+        comments_enabled = forms.BooleanField(required=False,
+                                              label="Comments",
+                                              initial=True)
         
     @classmethod
     def register(cls, entry_type):
