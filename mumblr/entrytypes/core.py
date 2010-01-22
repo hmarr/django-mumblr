@@ -90,7 +90,7 @@ class VideoEntry(EntryType):
             'galoop.swf?clip_id={{!ID}}&amp;server=vimeo.com&amp;show_t'
             'itle=0&amp;show_byline=0&amp;show_portrait=0&amp;color=59a'
             '5d1&amp;fullscreen=1" /><embed src="http://vimeo.com/mooga'
-            'loop.swf?clip_id=8833777&amp;server=vimeo.com&amp;show_tit'
+            'loop.swf?clip_id={{!ID}}&amp;server=vimeo.com&amp;show_tit'
             'le=0&amp;show_byline=0&amp;show_portrait=0&amp;color=59a5d'
             '1&amp;fullscreen=1" type="application/x-shockwave-flash" a'
             'llowfullscreen="true" allowscriptaccess="always" width="60'
