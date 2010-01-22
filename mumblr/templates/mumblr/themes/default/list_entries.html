@@ -38,7 +38,7 @@
         </h3>
             <div class="post-info">
             <p>
-            <span class="date">{{ entry.publish_date|date:"F jS, Y" }}</span>
+            <span class="date">{{ entry.publish_date|timesince }} ago</span>
             &mdash;
             {% if entry.comments_enabled %}
             <a href="{{ entry.get_absolute_url }}#comments" class="comments">{{ entry.comments|length|default:0|safe }} Comment{{ entry.comments|length|default:0|pluralize }}</a>

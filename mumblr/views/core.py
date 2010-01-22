@@ -106,7 +106,6 @@ def entry_detail(request, date, slug):
 
     context = {
         'entry': entry,
-        'datenow': datetime.now(),
         'form': form,
     }
     return render_to_response(_lookup_template('entry_detail'), context,

@@ -71,7 +71,7 @@ This post will expire in {{ entry.expiry_date|timeuntil:datenow }}
     {% for comment in entry.comments %}
         {% if comment.is_admin %}<li class="is_admin">{% else %}<li>{% endif %}
         <div class="comment-info">
-        <strong>{{ comment.author }}</strong> <span class="comment-time">{{ comment.date|timesince:datenow }} ago</span>
+        <strong>{{ comment.author }}</strong> <span class="comment-time">{{ comment.date|timesince }} ago</span>
         {% if user.is_authenticated %}        
         <div class="edit-box">
             <form action="{% url delete-comment %}" method="post">
