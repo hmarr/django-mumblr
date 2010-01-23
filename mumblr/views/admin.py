@@ -51,35 +51,28 @@ def edit_entry(request, entry_id):
             for field, value in form.cleaned_data.items():
                 if field in entry._fields.keys():
                     entry[field] = value
-            entry.tags = entry.tags.lower()
-            if ',' in entry.tags:
-                entry.tags = [tag.strip() for tag in entry.tags.split(',')]
-            else:
-                entry.tags = [tag.strip() for tag in entry.tags.split()]
-
-            # We're using publish_time to get the time from the user - in
-            # the DB its actually just part of publish_date, so update
-            # publish_date to include publish_time's info
-            publish_time = form.cleaned_data['publish_time']
-            entry.publish_date = entry.publish_date.replace(
-                hour=publish_time.hour,
-                minute=publish_time.minute,
-                second=publish_time.second,
-            )
-
             entry.save()
             return HttpResponseRedirect(entry.get_absolute_url())
     else:
         fields = entry._fields.keys()
         field_dict = dict([(name, entry[name]) for name in fields])
+
         # tags are stored as a list in the db, convert them back to a string
         field_dict['tags'] = ', '.join(field_dict['tags'])
-        # publish_time isn't initialised as it doesn't have a field in the DB
+
+        # publish_time and expiry_time are not initialised as they
+        # don't have a field in the DB
         field_dict['publish_time'] = time(
             hour=entry.publish_date.hour,
             minute=entry.publish_date.minute,
             second=entry.publish_date.second,
         )
+        if field_dict['expiry_date']:
+            field_dict['expiry_time'] = time(
+                hour=entry.expiry_date.hour,
+                minute=entry.expiry_date.minute,
+                second=entry.expiry_date.second,
+            )
         form = form_class(field_dict)
 
     context = {

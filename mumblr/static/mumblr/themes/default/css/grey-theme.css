@@ -299,7 +299,7 @@ ol li { list-style-type: decimal; }
  */
 
 form table {
-    margin-left: -120px;
+    margin-left: -110px;
     position: relative;
 }
 
@@ -319,6 +319,10 @@ input[type=text], input[type=password], textarea {
     font-size: 14px;
 }
 
+input.unsized {
+    width: auto;
+}
+
 input[type=text]:focus, input[type=password]:focus, textarea:focus {
     border: 2px solid #B6B7AB;
 }
@@ -332,6 +336,7 @@ input[type=text]:focus, input[type=password]:focus, textarea:focus {
     margin-bottom: 0.3em;
     border: 2px solid #c00;
     font-size: 12px;
+    line-height: 16px;
     font-weight: bold;
     border-radius: 5px;
     -moz-border-radius: 5px;
@@ -467,9 +472,9 @@ table tbody tr td {
 
 table tbody tr th {
     text-align: right;
-    padding: 0 20px 0.6em 0;
+    padding: 0 10px 0.6em 0;
     width: 100px;
-    font-size: 14px;
+    font-size: 12px;
     vertical-align: top;
     line-height: 28px;
     color: #777;

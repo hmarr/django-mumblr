@@ -104,9 +104,16 @@ def entry_detail(request, date, slug):
     else:
         form = form_class(request.user)
 
+    # Check for comment expiry
+    comments_expired = False
+    if entry.comments_expiry_date:
+        if entry.comments_expiry_date < datetime.now():
+            comments_expired = True
+
     context = {
         'entry': entry,
         'form': form,
+        'comments_expired': comments_expired
     }
     return render_to_response(_lookup_template('entry_detail'), context,
                               context_instance=RequestContext(request))

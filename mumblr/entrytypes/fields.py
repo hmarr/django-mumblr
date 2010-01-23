@@ -3,6 +3,8 @@ from django import forms
 from django.utils.safestring import mark_safe
 from django.utils.encoding import smart_unicode
 from django.utils.translation import ugettext_lazy as _
+from django.forms.widgets import Widget, Select, TextInput
+from django.forms.extras.widgets import SelectDateWidget
 
 import captcha
 

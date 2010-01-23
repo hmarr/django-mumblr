@@ -47,6 +47,8 @@ var RecaptchaOptions = {
 {% else %}
 <span class="comments">Comments closed</span>
 {% endif %}
+&mdash;
+<a href="{{ entry.get_absolute_url }}" class="permalink">Permalink</a>
 </p>
 {% if entry.tags %}
     <ul class="inline-tag-list">
@@ -58,11 +60,11 @@ var RecaptchaOptions = {
 <div class="clear"></div>
 </div>
 {{ entry.rendered_content|safe }}
-<div class="hr-styled"></div>
 {% if entry.expiry_date %}
-This post will expire in {{ entry.expiry_date|timeuntil:datenow }}    
-<div class="hr-unstyled"></div>
+<hr/>
+<p>This post will expire in {{ entry.expiry_date|timeuntil }}</p>
 {% endif %}
+<div class="hr-styled"></div>
 <h3>Discussion</h3>
 <a name="comments"></a>
 {% if entry.comments_enabled %}
@@ -81,13 +83,14 @@ This post will expire in {{ entry.expiry_date|timeuntil:datenow }}
         </div>
         {% endif %}
         </div>
-        {{ comment.rendered_content|safe }}
+        {{ comment.rendered_content|safe|typogrify }}
         </li>
     {% endfor %}
     </ul>
 {% else %}
 There are no comments for this post.
 {% endif %}
+{% if not comments_expired %}
 <div class="clear"></div>
 <h3>Leave A Reply</h3>
 <p>You may use <a href="http://daringfireball.net/projects/markdown/basics">Markdown</a> syntax but raw HTML will be escaped and headings normalised.</p>
@@ -100,6 +103,9 @@ There are no comments for this post.
     </table>
 </form>
 {% else %}
-Comments for this post are closed
+<p>Comments on this post have now been closed.</p>
+{% endif %}
+{% else %}
+<p>Comments for this post are closed.</p>
 {% endif %}
 {% endblock %}

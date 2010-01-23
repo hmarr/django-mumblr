@@ -4,7 +4,7 @@ from django.db.models import permalink
 from django.forms.extras.widgets import SelectDateWidget
 import fields
 
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 import re
 from uuid import uuid4
 from mongoengine import *
@@ -81,6 +81,8 @@ class EntryType(Document):
     tags = ListField(StringField(max_length=50))
     comments = ListField(EmbeddedDocumentField(Comment))
     comments_enabled = BooleanField(default=True)
+    comments_expiry = StringField(required=True)
+    comments_expiry_date = DateTimeField(required=False, default=None)
     published = BooleanField(default=True)
     publish_date = DateTimeField(required=True, default=datetime.now)
     expiry_date = DateTimeField(required=False, default=None)
@@ -120,7 +122,6 @@ class EntryType(Document):
         slug = forms.CharField()
         tags = forms.CharField(required=False)
         published = forms.BooleanField(required=False, initial=True)
-        # If not provided, it will be set to datetime.now()
         this_year = date.today().year
         publish_date = forms.DateTimeField(
             widget=SelectDateWidget(
@@ -130,11 +131,70 @@ class EntryType(Document):
         publish_time = forms.TimeField()
         expiry_date = forms.DateTimeField(
             widget=SelectDateWidget(required=False),
-            required=False
+            required=False)
+        expiry_time = forms.TimeField(required=False)
+        comments_enabled = forms.BooleanField(
+            required=False,
+            label="Comments",
+            initial=True)
+        choices = (
+            ('never', 'Never'),
+            ('week', '1 Week'),
+            ('month', '1 Month'),
+            ('half_year', '6 Monthes'),
         )
-        comments_enabled = forms.BooleanField(required=False,
-                                              label="Comments",
-                                              initial=True)
+        comments_expiry = forms.ChoiceField(
+            required=False, choices=choices)
+
+        def clean(self):
+            """Convert expiry options to actual dates and add publish time
+            to publish date
+            """
+            data = self.cleaned_data
+
+            if not self._errors:
+                tags = data['tags']
+                tags = tags.lower()
+                if ',' in tags:
+                    tags = [tag.strip() for tag in tags.split(',')]
+                else:
+                    tags = [tag.strip() for tag in tags.split()]
+                data['tags'] = tags
+
+                # We're using publish_time to get the time from the user - in
+                # the DB its actually just part of publish_date, so update
+                # publish_date to include publish_time's info
+                publish_time = data['publish_time']
+                expiry_time = data['expiry_time']
+                if publish_time and data['publish_date']:
+                    data['publish_date'] = data['publish_date'].replace(
+                        hour=publish_time.hour,
+                        minute=publish_time.minute,
+                        second=publish_time.second)
+                if expiry_time and data['expiry_date']:
+                    data['expiry_date'] = data['expiry_date'].replace(
+                        hour=expiry_time.hour,
+                        minute=expiry_time.minute,
+                        second=expiry_time.second)
+
+                # The comments expiry date is selected and stored as a relative
+                # time from the publish_date but it is useful to have an actual
+                # expiry date too, so we work it out here
+                comments_expiry = data['comments_expiry']
+                publish_date = data['publish_date']
+                if comments_expiry:
+                    data['comments_expiry_date'] = {
+                        # With no simple way of adding an exact month,
+                        # approximate day representations are used
+                        'never': lambda now: None,
+                        'week': lambda now: now + timedelta(7),
+                        'month': lambda now: now + timedelta(30),
+                        'half_year': lambda now: now + timedelta(182),
+                    }[comments_expiry](publish_date)
+                else:
+                    data['comments_expiry_date'] = None
+
+            return data
         
     @classmethod
     def register(cls, entry_type):
