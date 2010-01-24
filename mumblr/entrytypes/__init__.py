@@ -21,10 +21,11 @@ def markup(text, small_headings=False, no_follow=True, escape=False):
         safe_mode = 'escape' if escape else None
         try:
             import pygments
-            text = markdown.markdown(text, ['codehilite', 'footnotes', 'abbr'],
+            text = markdown.markdown(text, ['codehilite', 'extra', 'toc'],
                                      safe_mode=safe_mode)
+
         except ImportError:
-            text = markdown.markdown(text, ['footnotes', 'abbr'],
+            text = markdown.markdown(text, ['extra', 'toc'],
                                      safe_mode=safe_mode)
     
     if small_headings:

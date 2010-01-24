@@ -25,7 +25,7 @@
                     <span class="fold"></span>
                     <div class="fold-box-padder">
                         <h1><a href="{% url recent-entries %}">{{ SITE_INFO_TITLE }}</a></h1>
-                        <h4 class="author">{{ SITE_INFO_DESC }}</h4></p>
+                        <h4 class="author">{{ SITE_INFO_DESC }}</h4>
                     </div>
                 </div>
 
@@ -51,9 +51,10 @@
                             {{ user.email }}
                         {% endif %}
                         </h4>
-                        <p>Welcome back!</p>
-                        <p><a class="mbl-button" href="{% url admin %}">Admin</a>&nbsp;<a class="mbl-button mbl-button-primary" href="{% url log-out %}">Log out</a>
-                        </p>
+                        <ul class="inline">
+                            <li><a class="mbl-button" href="{% url admin %}">Admin</a></li>
+                            <li><a class="mbl-button mbl-button-primary" href="{% url log-out %}">Log out</a></li>
+                        </ul>
                     </div>
                 </div>
                 {% endif %}

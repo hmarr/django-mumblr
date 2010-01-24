@@ -51,6 +51,8 @@ strong {
 
 sup {
     vertical-align: super;
+    line-height: 15px;
+    font-size: 12px;
 }
 
 sub {
@@ -236,6 +238,15 @@ h3 a.video:hover {
  *
  */
 
+.toc {
+    width: 270px;
+    display: block;
+    float: right;
+    margin-left: 30px;
+    border-bottom: 1px solid #eee;
+    border-top: 1px solid #eee;
+}
+
 ol, ul {
     list-style-image:none;
     list-style-position:outside;
@@ -248,6 +259,10 @@ ol, ul {
 
 ul li { list-style-type: square; }
 ol li { list-style-type: decimal; }
+
+li > ul {
+    margin-left: 20px;
+}
 
 .inline li {
     display: inline;
@@ -392,6 +407,10 @@ a.mbl-button-primary:hover, input[type=submit]:hover {
 
 p, ul, ol, blockquote, pre code {
     margin: 0.6em 0 ;
+}
+
+p {
+    margin-bottom: 1.2em;
 }
 
 .left-column {
