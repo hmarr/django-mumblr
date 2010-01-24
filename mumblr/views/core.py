@@ -113,7 +113,7 @@ def entry_detail(request, date, slug):
     context = {
         'entry': entry,
         'form': form,
-        'comments_expired': comments_expired
+        'comments_expired': comments_expired,
     }
     return render_to_response(_lookup_template('entry_detail'), context,
                               context_instance=RequestContext(request))
