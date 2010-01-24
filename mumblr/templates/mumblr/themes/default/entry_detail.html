@@ -83,7 +83,7 @@ var RecaptchaOptions = {
         </div>
         {% endif %}
         </div>
-        {{ comment.rendered_content|safe|typogrify }}
+        {{ comment.rendered_content|safe }}
         </li>
     {% endfor %}
     </ul>

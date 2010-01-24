@@ -135,8 +135,8 @@ class MumblrTest(TestCase):
 
         comment_data = {
             'author': 'Mr Test 2',
-            'body': 'another test comment',
-            'rendered_content': '<p>another test comment</p>',
+            'body': 'another-test-comment',
+            'rendered_content': '<p>another-test-comment</p>',
             'csrfmiddlewaretoken': self.get_csrf_token(),
         }
 
@@ -151,6 +151,7 @@ class MumblrTest(TestCase):
         self.assertRedirects(response, add_url, target_status_code=200)
 
         response = self.client.get(add_url)
+        print response
         self.assertContains(response, comment_data['rendered_content'])
 
     def test_edit_entry(self):

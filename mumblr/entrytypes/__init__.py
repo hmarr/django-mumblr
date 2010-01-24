@@ -81,7 +81,7 @@ class EntryType(Document):
     tags = ListField(StringField(max_length=50))
     comments = ListField(EmbeddedDocumentField(Comment))
     comments_enabled = BooleanField(default=True)
-    comments_expiry = StringField(required=True)
+    comments_expiry = StringField(required=False, default=None)
     comments_expiry_date = DateTimeField(required=False, default=None)
     published = BooleanField(default=True)
     publish_date = DateTimeField(required=True, default=datetime.now)
