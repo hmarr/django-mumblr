@@ -13,7 +13,8 @@ from mongoengine.django.auth import User
 
 MARKUP_LANGUAGE = getattr(settings, 'MUMBLR_MARKUP_LANGUAGE', None)
 
-def markup(text, small_headings=False, no_follow=True, escape=False):
+def markup(text, small_headings=False, no_follow=True, escape=False,
+           scale_headings=True):
     """Markup text using the markup language specified in the settings.
     """
     if MARKUP_LANGUAGE == 'markdown':
@@ -21,12 +22,16 @@ def markup(text, small_headings=False, no_follow=True, escape=False):
         safe_mode = 'escape' if escape else None
         try:
             import pygments
-            text = markdown.markdown(text, ['codehilite', 'extra', 'toc'],
-                                     safe_mode=safe_mode)
+            options = ['codehilite', 'extra', 'toc']
+            if scale_headings:
+                options.append('headerid(level=3, forceid=False)')
+            text = markdown.markdown(text, options, safe_mode=safe_mode)
 
         except ImportError:
-            text = markdown.markdown(text, ['extra', 'toc'],
-                                     safe_mode=safe_mode)
+            options = ['extra', 'toc']
+            if scale_headings:
+                options.append('headerid(level=3, forceid=False)')
+            text = markdown.markdown(text, options, safe_mode=safe_mode)
     
     if small_headings:
         text = re.sub('<(/?h)[1-6]', '<\g<1>5', text)

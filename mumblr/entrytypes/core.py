@@ -43,7 +43,7 @@ class LinkEntry(EntryType):
 
     def rendered_content(self):
         if self.description:
-            return markup(self.description)
+            return markup(self.description, no_follow=False)
         return '<p>Link: <a href="%s">%s</a></p>' % (self.link_url, 
                                                      self.link_url)
 

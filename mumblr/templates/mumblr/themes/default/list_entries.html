@@ -5,8 +5,6 @@
 {% block title %}{{ title }}{% endblock %}
 
 {% block content %}
-<h2>{{ title }}</h2>
-<div class="clear"></div>
 {% if not entries.object_list %}
     There are no recent entries. {{ no_entries_messages|random|safe }}
 {% endif %}
@@ -15,16 +13,7 @@
         <div class="hr-styled"></div>
     {% endif %}
     <div class="entry">
-        {% if user.is_authenticated %}
-            <div class="edit-box">
-                <a class="mbl-button" href="{% url edit-entry entry.id %}">Edit</a>&nbsp;
-                <form action="{% url delete-entry %}" method="post">
-                    <input type="hidden" value="{{ entry.id }}" name="entry_id" />
-                    <input type="submit" value="Delete" />
-                </form>
-            </div>
-        {% endif %}
-        <h3>
+        <h2>
             {% if entry.link_url %}
                 <a target="_blank" class="external-link" href="{{ entry.link_url }}">
             {% else %}
@@ -35,8 +24,17 @@
                 {% endif %}
             {% endif %}
             {{ entry.title|safe|typogrify }}</a>
-        </h3>
+        </h2>
             <div class="post-info">
+            {% if user.is_authenticated %}
+                <div class="edit-box">
+                    <a class="mbl-button" href="{% url edit-entry entry.id %}">Edit</a>&nbsp;
+                    <form action="{% url delete-entry %}" method="post">
+                        <input type="hidden" value="{{ entry.id }}" name="entry_id" />
+                        <input type="submit" value="Delete" />
+                    </form>
+                </div>
+            {% endif %}
             <p>
             <span class="date">{{ entry.publish_date|timesince }} ago</span>
             &mdash;

@@ -113,8 +113,8 @@ h2 {
     line-height: 28px;
 }
 
-h3 {
-    padding-right: 120px;
+h2, h3 {
+    padding-right: 100px;
 }
 
 h2 a, h3 a, h4 a {

@@ -7,7 +7,7 @@ from mongoengine.django.auth import User
 import re
 from datetime import datetime
 
-from mumblr.entrytypes.core import TextEntry, HtmlComment 
+from mumblr.entrytypes.core import TextEntry, HtmlComment, LinkEntry
 
 mongoengine.connect('mumblr-unit-tests')
 
@@ -91,6 +91,44 @@ class MumblrTest(TestCase):
         response = self.client.get('/tags/')
         self.assertContains(response, 'tests', status_code=200)
 
+    def test_add_link(self):
+        """Ensure links get added properly, without nofollow attr
+        """
+        self.login()
+        response = self.client.get('/admin/add/Lext')
+
+        entry_data = {
+            'title': 'Link Entry',
+            'slug': 'link-entry',
+            'tags': 'tests',
+            'published': 'true',
+            'content': 'test',
+            'publish_date_year': datetime.now().year,
+            'publish_date_month': datetime.now().month,
+            'publish_date_day': datetime.now().day,
+            'publish_time': datetime.now().strftime('%H:%M:%S'),
+            'rendered_content': '<p>test</p>',
+            'link_url': 'http://stevechallis.com/',
+            'csrfmiddlewaretoken': self.get_csrf_token(),
+        }
+        # Check invalid form fails
+        invalid_data = entry_data.copy()
+        invalid_data['link_url'] = 'this-is-not-a-url'
+        response = self.client.post('/admin/add/Link/', invalid_data)
+        self.assertTemplateUsed(response, 'mumblr/admin/add_entry.html')
+
+        # Check adding an entry does work
+        response = self.client.post('/admin/add/text/', entry_data)
+        entry = LinkEntry(slug=entry_data['slug'], publish_time=datetime.now())
+        url = entry.get_absolute_url()
+        self.assertRedirects(response, url, target_status_code=200)
+
+        response = self.client.get(url)
+        self.assertNotContains(response, 'rel="nofollow"')
+
+        response = self.client.get('/')
+        self.assertContains(response, entry_data['content'])
+
     def test_add_entry(self):
         """Ensure that entries may be added.
         """
@@ -151,7 +189,6 @@ class MumblrTest(TestCase):
         self.assertRedirects(response, add_url, target_status_code=200)
 
         response = self.client.get(add_url)
-        print response
         self.assertContains(response, comment_data['rendered_content'])
 
     def test_edit_entry(self):
