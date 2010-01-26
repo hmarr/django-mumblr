@@ -8,6 +8,7 @@ from django.core.paginator import Paginator, InvalidPage, EmptyPage
 from django.conf import settings
 from django.contrib.syndication.feeds import Feed
 from django.utils.feedgenerator import Atom1Feed
+from django.template import defaultfilters
 
 from datetime import datetime, time
 from mongoengine.django.auth import REDIRECT_FIELD_NAME
@@ -80,6 +81,7 @@ def edit_entry(request, entry_id):
         'title': 'Edit an entry',
         'type': type, 
         'form': form,
+        'host': request.get_host(),
     }
     return render_to_response(_lookup_template('add_entry'), context,
                               context_instance=RequestContext(request))
@@ -107,15 +109,26 @@ def add_entry(request, type):
             entry.save()
             return HttpResponseRedirect(entry.get_absolute_url())
     else:
-        form = form_class(initial={
+        initial = {
             'publish_date': datetime.now(),
             'publish_time': datetime.now().time(),
-        })
+            'comments_enabled': True,
+        }
+        # Pass in inital values from query string - added by bookmarklet
+        for field, value in request.GET.items():
+            if field in form_class.base_fields:
+                initial[field] = value
+        
+        if 'title' in initial:
+            initial['slug'] = defaultfilters.slugify(initial['title'])
+
+        form = form_class(initial=initial)
 
     context = {
         'title': 'Add %s Entry' % type,
         'type': type, 
         'form': form,
+        'host': request.get_host(),
     }
     return render_to_response(_lookup_template('add_entry'), context,
                               context_instance=RequestContext(request))
