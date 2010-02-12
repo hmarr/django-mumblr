@@ -77,11 +77,14 @@ def edit_entry(request, entry_id):
             )
         form = form_class(field_dict)
 
+    link_url = reverse('add-entry', args=['Link'])
+    video_url = reverse('add-entry', args=['Video'])
     context = {
         'title': 'Edit an entry',
         'type': type, 
         'form': form,
-        'host': request.get_host(),
+        'link_url': request.build_absolute_uri(link_url),
+        'video_url': request.build_absolute_uri(video_url),
     }
     return render_to_response(_lookup_template('add_entry'), context,
                               context_instance=RequestContext(request))
@@ -124,11 +127,14 @@ def add_entry(request, type):
 
         form = form_class(initial=initial)
 
+    link_url = reverse('add-entry', args=['Link'])
+    video_url = reverse('add-entry', args=['Video'])
     context = {
         'title': 'Add %s Entry' % type,
         'type': type, 
         'form': form,
-        'host': request.get_host(),
+        'link_url': request.build_absolute_uri(link_url),
+        'video_url': request.build_absolute_uri(video_url),
     }
     return render_to_response(_lookup_template('add_entry'), context,
                               context_instance=RequestContext(request))
