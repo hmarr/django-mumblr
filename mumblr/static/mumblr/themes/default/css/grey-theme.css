@@ -204,6 +204,8 @@ h3 a.external-link {
     padding-left: 30px;
     position: relative;
     left: -30px;
+    display: block;
+    line-height: 0.96em;
 }
 
 h3 a.external-link:hover {
