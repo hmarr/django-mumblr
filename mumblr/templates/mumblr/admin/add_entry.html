@@ -8,6 +8,7 @@
 <p>Quickly add link and video posts with this bookmarklet: &nbsp;<a class="mbl-button" href="javascript:(function(){var url='{{ link_url }}';var args=['title='+encodeURIComponent(document.title)];if(window.location.href.match(/youtube.com\/watch?v=/)||window.location.href.match(/vimeo.com\/\d+/)){url='{{ video_url }}';args.push('video_url='+encodeURIComponent(window.location.href));}else{args.push('link_url='+encodeURIComponent(window.location.href));}window.location=url+args.join('&');})()">Mumble</a></p>
 <br />
 <form action="" method="post">
+    {% csrf_token %}
     <table>
         {{ form }}
         <tr>

@@ -30,6 +30,7 @@
                 <div class="edit-box">
                     <a class="mbl-button" href="{% url edit-entry entry.id %}">Edit</a>&nbsp;
                     <form action="{% url delete-entry %}" method="post">
+                        {% csrf_token %}
                         <input type="hidden" value="{{ entry.id }}" name="entry_id" />
                         <input type="submit" value="Delete" />
                     </form>

@@ -6,6 +6,7 @@
 <h2>Log In</h2>
 <div class="clear"></div>
 <form action="" method="post">
+    {% csrf_token %}
         <table>
         {{ form }}
         <tr>

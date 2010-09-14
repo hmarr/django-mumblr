@@ -34,6 +34,7 @@ var RecaptchaOptions = {
     <div class="edit-box">
         <a class="mbl-button" href="{% url edit-entry entry.id %}">Edit</a>&nbsp;
         <form action="{% url delete-entry %}" method="post">
+            {% csrf_token %}
             <input type="hidden" value="{{ entry.id }}" name="entry_id" />
             <input type="submit" value="Delete" class="mbl-button mbl-button-primary" />
         </form>
@@ -77,6 +78,7 @@ var RecaptchaOptions = {
         {% if user.is_authenticated %}        
         <div class="edit-box">
             <form action="{% url delete-comment %}" method="post">
+                {% csrf_token %}
                 <input type="hidden" value="{{ comment.id }}" name="comment_id" />
                 <input type="submit" value="Delete" class="mbl-button mbl-button-primary" />
             </form>
@@ -95,6 +97,7 @@ There are no comments for this post.
 <h3>Leave A Reply</h3>
 <p>You may use <a href="http://daringfireball.net/projects/markdown/basics">Markdown</a> syntax but raw HTML will be escaped and headings normalised.</p>
 <form action="" method="post">
+    {% csrf_token %}
     <table>
         {{ form }}
         <tr>
